@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="/favicon.ico" />
+    <title>李宛庭 Wan-Ting Lee | Full-Stack Developer</title>
+    <meta name="description" content="Portfolio of 李宛庭 (Wan-Ting Lee), Full-Stack Developer with semiconductor industry background (Taiwan Mobile, TSMC, VIS)." />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+      :root {
+        --vscode-bg: #121212;
+        --vscode-sidebar: #1e1e1e;
+        --vscode-activity: #2d2d2d;
+        --vscode-accent: #007acc;
+        --vscode-text: #d4d4d4;
+        --vscode-comment: #6a9955;
+        --vscode-string: #ce9178;
+        --vscode-keyword: #569cd6;
+        --vscode-class: #4ec9b0;
+        --vscode-function: #dcdcaa;
+      }
+
+      body.theme-darcula {
+        --vscode-bg: #2b2b2b;
+        --vscode-sidebar: #313335;
+        --vscode-activity: #3c3f41;
+        --vscode-accent: #5c8bc1;
+        --vscode-text: #a9b7c6;
+        --vscode-comment: #808080;
+        --vscode-string: #6a8759;
+        --vscode-keyword: #cc7832;
+        --vscode-class: #a9b7c6;
+        --vscode-function: #ffc66d;
+      }
+
+      /* Custom scrollbar for IDE feel */
+      ::-webkit-scrollbar {
+        width: 10px;
+        background: var(--vscode-sidebar);
+      }
+      ::-webkit-scrollbar-track {
+        background: var(--vscode-sidebar);
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #424242;
+        border-radius: 5px;
+        border: 2px solid var(--vscode-sidebar);
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background: #4f4f4f;
+      }
+      .glass-panel {
+        background: rgba(30, 30, 30, 0.6);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border: 1px solid rgba(255, 255, 255, 0.08);
+      }
+      body.theme-darcula .glass-panel {
+        background: rgba(60, 63, 65, 0.6);
+      }
+    </style>
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            fontFamily: {
+              sans: ['Inter', 'sans-serif'],
+              mono: ['JetBrains Mono', 'monospace'],
+            },
+            colors: {
+              vscode: {
+                bg: 'var(--vscode-bg)',
+                sidebar: 'var(--vscode-sidebar)',
+                activity: 'var(--vscode-activity)',
+                accent: 'var(--vscode-accent)',
+                text: 'var(--vscode-text)',
+                comment: 'var(--vscode-comment)',
+                string: 'var(--vscode-string)',
+                keyword: 'var(--vscode-keyword)',
+                class: 'var(--vscode-class)',
+                function: 'var(--vscode-function)'
+              },
+              primary: {
+                400: '#60a5fa', 
+                500: '#3b82f6', 
+                600: '#2563eb', 
+              },
+              secondary: {
+                400: '#a78bfa', 
+                500: '#8b5cf6', 
+                600: '#7c3aed', 
+              },
+            },
+            animation: {
+              'blink': 'blink 1s step-end infinite',
+              'fade-in-up': 'fadeInUp 0.5s ease-out forwards',
+            },
+            keyframes: {
+              blink: {
+                '0%, 100%': { opacity: '1' },
+                '50%': { opacity: '0' },
+              },
+              fadeInUp: {
+                '0%': { opacity: '0', transform: 'translateY(10px)' },
+                '100%': { opacity: '1', transform: 'translateY(0)' },
+              }
+            }
+          }
+        }
+      }
+    </script>
+  <script type="importmap">
+{
+  "imports": {
+    "react/": "https://esm.sh/react@18.2.0/",
+    "react": "https://esm.sh/react@18.2.0",
+    "lucide-react": "https://esm.sh/lucide-react@0.344.0",
+    "react-dom/": "https://esm.sh/react-dom@18.2.0/"
+  }
+}
+</script>
+<link rel="stylesheet" href="/index.css">
+</head>
+  <body class="bg-vscode-bg text-vscode-text font-sans antialiased selection:bg-vscode-accent selection:text-white transition-colors duration-300">
+    <div id="root"></div>
+  <script type="module" src="/index.tsx"></script>
+</body>
+</html>

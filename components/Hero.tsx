@@ -1,0 +1,168 @@
+import React, { useEffect, useState } from 'react';
+import { PERSONAL_INFO, SOCIAL_LINKS } from '../constants';
+import { ArrowDown } from 'lucide-react';
+
+const Hero: React.FC = () => {
+  const [text, setText] = useState('');
+  const [windowState, setWindowState] = useState<'visible' | 'minimized' | 'closed'>('visible');
+  const [theme, setTheme] = useState<'vscode' | 'darcula'>('vscode');
+  
+  const fullText = `> const engineer = new FullStackDeveloper("${PERSONAL_INFO.name}");\n> "Loading: ${PERSONAL_INFO.tagline}..."`;
+  
+  useEffect(() => {
+    let index = 0;
+    const timer = setInterval(() => {
+      setText(fullText.slice(0, index));
+      index++;
+      if (index > fullText.length) clearInterval(timer);
+    }, 35);
+    return () => clearInterval(timer);
+  }, [fullText]);
+
+  const toggleTheme = () => {
+    const newTheme = theme === 'vscode' ? 'darcula' : 'vscode';
+    setTheme(newTheme);
+    if (newTheme === 'darcula') {
+      document.body.classList.add('theme-darcula');
+    } else {
+      document.body.classList.remove('theme-darcula');
+    }
+  };
+
+  const isVisible = windowState === 'visible';
+
+  return (
+    <section 
+      className={`relative flex items-center justify-center overflow-hidden transition-all duration-700 ease-in-out ${
+        isVisible ? 'min-h-screen pt-16 md:pt-0 opacity-100' : 'min-h-0 h-0 opacity-0 pt-0'
+      }`}
+    >
+      
+      {/* Mesh Gradient Background */}
+      <div className="absolute inset-0 bg-vscode-bg transition-colors duration-300">
+        <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-vscode-accent/10 rounded-full blur-[120px] pointer-events-none mix-blend-screen transition-colors duration-300"></div>
+        <div className="absolute bottom-0 left-0 w-[500px] h-[500px] bg-purple-900/10 rounded-full blur-[120px] pointer-events-none mix-blend-screen"></div>
+      </div>
+
+      <div className="w-full max-w-4xl px-4 md:px-8 relative z-10">
+        
+        {/* Terminal Window */}
+        <div 
+          className={`glass-panel rounded-lg overflow-hidden shadow-2xl origin-bottom transition-all duration-500 ease-in-out ${
+            windowState === 'closed' ? 'opacity-0 scale-95 pointer-events-none' : 
+            windowState === 'minimized' ? 'opacity-0 scale-0 translate-y-24 pointer-events-none' : 
+            'animate-fade-in-up'
+          }`}
+        >
+          {/* Terminal Header */}
+          <div 
+            className="bg-vscode-activity px-4 py-2 flex items-center gap-2 border-b border-white/5 transition-colors duration-300"
+          >
+            <div className="flex gap-2 window-control">
+              <div 
+                onClick={() => setWindowState('closed')}
+                className="w-3 h-3 rounded-full bg-red-500/80 hover:bg-red-600 cursor-pointer transition-colors"
+                title="Close"
+              ></div>
+              <div 
+                onClick={() => setWindowState('minimized')}
+                className="w-3 h-3 rounded-full bg-yellow-500/80 hover:bg-yellow-600 cursor-pointer transition-colors"
+                title="Minimize"
+              ></div>
+              <div 
+                onClick={toggleTheme}
+                className="w-3 h-3 rounded-full bg-green-500/80 hover:bg-green-600 cursor-pointer transition-colors group relative"
+                title="Toggle Theme"
+              >
+              </div>
+            </div>
+            <div className="ml-4 text-xs text-gray-500 font-mono flex-1 text-center pointer-events-none">
+              {theme === 'vscode' ? 'developer.tsx' : 'developer.java'}
+            </div>
+          </div>
+
+          {/* Terminal Body */}
+          <div className="p-6 md:p-10 min-h-[300px] font-mono text-sm md:text-lg">
+            <div className="whitespace-pre-wrap leading-relaxed">
+              <div className="text-vscode-comment mb-2"># Welcome to my portfolio</div>
+              
+              {/* Line 1 */}
+              <div>
+                 <span className="text-vscode-text select-none mr-2">{'>'}</span>
+                 {text.length > 2 && (
+                   <>
+                     <span className="text-vscode-keyword">const </span>
+                     <span className="text-vscode-function">engineer </span>
+                     <span className="text-vscode-text">= </span>
+                     <span className="text-vscode-keyword">new </span>
+                     <span className="text-vscode-class">FullStackDeveloper</span>
+                     <span className="text-vscode-text">(</span>
+                     <span className="text-vscode-string">"{PERSONAL_INFO.name}"</span>
+                     <span className="text-vscode-text">);</span>
+                   </>
+                 )}
+                 {text.length <= 2 && <span>{text}</span>}
+              </div>
+
+               {/* Line 2 - showing typing effect */}
+               {text.includes('\n') && (
+                 <div className="mt-2">
+                    <span className="text-vscode-text select-none mr-2">{'>'}</span>
+                    <span className="text-vscode-string">
+                      {text.split('\n')[1].substring(2)}
+                    </span>
+                    <span className="animate-blink inline-block w-2 h-5 bg-vscode-accent align-middle ml-1"></span>
+                 </div>
+               )}
+               {!text.includes('\n') && text.length > 2 && (
+                 <span className="animate-blink inline-block w-2 h-5 bg-vscode-accent align-middle ml-1"></span>
+               )}
+
+            </div>
+
+            <div className={`mt-8 transition-opacity duration-1000 ${text.length >= fullText.length - 5 ? 'opacity-100' : 'opacity-0'}`}>
+              <h1 className="text-3xl md:text-5xl font-bold text-white mb-2">
+                {PERSONAL_INFO.chineseName} <span className="text-vscode-accent font-mono text-2xl md:text-4xl">"{PERSONAL_INFO.name}"</span>
+              </h1>
+              <div className="border-l-4 border-vscode-accent pl-4 mb-6">
+                <p className="text-white text-lg md:text-xl font-medium tracking-wide">
+                  {PERSONAL_INFO.title}
+                </p>
+                <p className="text-gray-400 text-sm mt-1">
+                  {PERSONAL_INFO.subTitle}
+                </p>
+              </div>
+
+              <div className="flex gap-4">
+                {SOCIAL_LINKS.map((link) => {
+                  const Icon = link.icon;
+                  return (
+                    <a
+                      key={link.platform}
+                      href={link.url}
+                      target={link.url.startsWith('http') ? '_blank' : undefined}
+                      rel={link.url.startsWith('http') ? 'noopener noreferrer' : undefined}
+                      className="p-3 rounded bg-white/5 hover:bg-vscode-accent/20 hover:text-white text-gray-400 transition-colors border border-white/5 flex items-center gap-2 text-sm font-mono"
+                      title={link.platform}
+                    >
+                      <Icon className="w-5 h-5" />
+                      <span className="hidden sm:inline">{link.platform}</span>
+                    </a>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className={`flex justify-center mt-12 transition-opacity duration-300 ${isVisible ? 'opacity-100' : 'opacity-0'}`}>
+          <a href="#about" className="animate-bounce text-gray-500 hover:text-white transition-colors">
+            <ArrowDown className="w-6 h-6" />
+          </a>
+        </div>
+      </div>
+    </section>
+  );
+};
+
+export default Hero;

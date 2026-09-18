@@ -1,0 +1,8 @@
+{
+  "name": "Ting Lee Portfolio",
+  "description": "Portfolio of 李宛庭 (Wan-Ting Lee), Full-Stack Developer with semiconductor industry background (Taiwan Mobile, TSMC, VIS).",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
