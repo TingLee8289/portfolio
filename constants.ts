@@ -1,7 +1,6 @@
 import {
   Github,
   Mail,
-  Phone,
   Server,
   Database,
   Container,
@@ -49,12 +48,11 @@ export const PERSONAL_INFO = {
 export const SOCIAL_LINKS: SocialLink[] = [
   { platform: "GitHub", url: PERSONAL_INFO.github, icon: Github },
   { platform: "Email", url: `mailto:${PERSONAL_INFO.email}`, icon: Mail },
-  { platform: "Phone", url: `tel:${PERSONAL_INFO.phone.replace(/-/g, '')}`, icon: Phone },
 ];
 
 export const STATS: StatItem[] = [
   { value: "9+ 年跨領域專業累積", label: "半導體先進製程整合 + 現代全端軟體開發", icon: Layers },
-  { value: "英語精通能力", label: "英語能力證明 (TOEIC 955 / TOEFL 94)", icon: Award }
+  { value: "英語精通能力", label: "TOEIC 955 / TOEFL 94", icon: Award }
 ];
 
 export const EDUCATION_DATA: EducationItem[] = [

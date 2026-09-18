@@ -6,7 +6,7 @@ const Footer: React.FC = () => {
     <footer className="py-12 bg-vscode-activity/50 border-t border-white/5 text-center">
       <div className="max-w-4xl mx-auto px-4 space-y-4">
         <p className="text-gray-500 text-xs font-mono">
-          {PERSONAL_INFO.name} © {new Date().getFullYear()}
+          © {new Date().getFullYear()} {PERSONAL_INFO.name} All Rights Reserved
         </p>
       </div>
     </footer>

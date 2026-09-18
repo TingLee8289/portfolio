@@ -32,7 +32,8 @@ const Hero: React.FC = () => {
   const isVisible = windowState === 'visible';
 
   return (
-    <section 
+    <section
+      id="info"
       className={`relative flex items-center justify-center overflow-hidden transition-all duration-700 ease-in-out ${
         isVisible ? 'min-h-screen pt-16 md:pt-0 opacity-100' : 'min-h-0 h-0 opacity-0 pt-0'
       }`}

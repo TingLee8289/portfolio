@@ -25,9 +25,16 @@ const Navbar: React.FC = () => {
       {/* Desktop Sidebar (Activity Bar Style) */}
       <nav className="hidden md:flex flex-col fixed left-0 top-0 h-full w-16 bg-vscode-activity border-r border-white/10 z-50 py-4 justify-between">
         <div className="flex flex-col items-center gap-6">
-          <div className="p-2 mb-2">
+          <a
+            href="#info"
+            className="p-2 mb-2 group relative"
+            aria-label="Info"
+          >
             <Terminal className="w-8 h-8 text-vscode-accent" />
-          </div>
+            <span className="absolute left-14 top-2 bg-vscode-sidebar text-white text-xs px-2 py-1 rounded border border-white/10 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity whitespace-nowrap z-50">
+              Info
+            </span>
+          </a>
           {navItems.map((item) => {
             const Icon = item.icon;
             return (
@@ -60,10 +67,10 @@ const Navbar: React.FC = () => {
       {/* Mobile Top Bar */}
       <nav className="md:hidden fixed w-full z-50 bg-vscode-bg/90 backdrop-blur-md border-b border-white/10">
         <div className="px-4 h-14 flex items-center justify-between">
-          <div className="flex items-center gap-2">
+          <a href="#info" className="flex items-center gap-2">
             <Terminal className="w-6 h-6 text-vscode-accent" />
             <span className="font-mono font-bold text-white">Wan-Ting.dev</span>
-          </div>
+          </a>
           <button 
             onClick={() => setIsMobileOpen(!isMobileOpen)}
             className="text-gray-300 hover:text-white"
