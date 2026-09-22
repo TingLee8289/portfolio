@@ -121,7 +121,13 @@ const Hero: React.FC = () => {
 
             </div>
 
-            <div className={`mt-8 transition-opacity duration-1000 ${text.length >= fullText.length - 5 ? 'opacity-100' : 'opacity-0'}`}>
+            <div
+              className="mt-8"
+              style={{
+                opacity: text.length >= fullText.length - 5 ? 1 : 0,
+                transition: 'opacity 1000ms ease-in-out',
+              }}
+            >
               <h1 className="text-3xl md:text-5xl font-bold text-white mb-2">
                 {PERSONAL_INFO.chineseName} <span className="text-vscode-accent font-mono text-2xl md:text-4xl">"{PERSONAL_INFO.name}"</span>
               </h1>
