@@ -6,22 +6,39 @@ import { ArrowDown } from 'lucide-react';
 const Hero: React.FC = () => {
   const { t } = useLanguage();
   const { personalInfo } = t;
-  const [text, setText] = useState('');
+  const [line1Text, setLine1Text] = useState('');
+  const [line2Text, setLine2Text] = useState('');
   const [windowState, setWindowState] = useState<'visible' | 'minimized' | 'closed'>('visible');
   const [theme, setTheme] = useState<'vscode' | 'darcula'>('vscode');
 
-  const fullText = `> const engineer = new FullStackDeveloper("${personalInfo.name}");\n> "${t.ui.hero.loadingLabel} ${personalInfo.tagline}..."`;
+  const line1 = `> const engineer = new FullStackDeveloper("${personalInfo.name}");`;
+  const line2 = `> "${t.ui.hero.loadingLabel} ${personalInfo.tagline}..."`;
 
   useEffect(() => {
-    setText('');
-    let index = 0;
-    const timer = setInterval(() => {
-      setText(fullText.slice(0, index));
-      index++;
-      if (index > fullText.length) clearInterval(timer);
+    setLine1Text('');
+    setLine2Text('');
+
+    let index1 = 0;
+    const timer1 = setInterval(() => {
+      index1++;
+      setLine1Text(line1.slice(0, index1));
+      if (index1 >= line1.length) clearInterval(timer1);
     }, 35);
-    return () => clearInterval(timer);
-  }, [fullText]);
+
+    // Line 2 types in parallel with line 1 so it's visible immediately
+    // instead of waiting for line 1's full typing duration to finish.
+    let index2 = 0;
+    const timer2 = setInterval(() => {
+      index2++;
+      setLine2Text(line2.slice(0, index2));
+      if (index2 >= line2.length) clearInterval(timer2);
+    }, 35);
+
+    return () => {
+      clearInterval(timer1);
+      clearInterval(timer2);
+    };
+  }, [line1, line2]);
 
   const toggleTheme = () => {
     const newTheme = theme === 'vscode' ? 'darcula' : 'vscode';
@@ -94,7 +111,7 @@ const Hero: React.FC = () => {
               {/* Line 1 */}
               <div>
                  <span className="text-vscode-text select-none mr-2">{'>'}</span>
-                 {text.length > 2 && (
+                 {line1Text.length > 2 && (
                    <>
                      <span className="text-vscode-keyword">const </span>
                      <span className="text-vscode-function">engineer </span>
@@ -106,21 +123,18 @@ const Hero: React.FC = () => {
                      <span className="text-vscode-text">);</span>
                    </>
                  )}
-                 {text.length <= 2 && <span>{text}</span>}
+                 {line1Text.length <= 2 && <span>{line1Text}</span>}
               </div>
 
-               {/* Line 2 - showing typing effect */}
-               {text.includes('\n') && (
+               {/* Line 2 - typing in parallel with line 1 */}
+               {line2Text.length > 0 && (
                  <div className="mt-2">
                     <span className="text-vscode-text select-none mr-2">{'>'}</span>
                     <span className="text-vscode-string">
-                      {text.split('\n')[1].substring(2)}
+                      {line2Text.substring(2)}
                     </span>
                     <span className="animate-blink inline-block w-2 h-5 bg-vscode-accent align-middle ml-1"></span>
                  </div>
-               )}
-               {!text.includes('\n') && text.length > 2 && (
-                 <span className="animate-blink inline-block w-2 h-5 bg-vscode-accent align-middle ml-1"></span>
                )}
 
             </div>
@@ -128,7 +142,7 @@ const Hero: React.FC = () => {
             <div
               className="mt-8"
               style={{
-                opacity: text.length >= fullText.length - 5 ? 1 : 0,
+                opacity: line2Text.length >= line2.length - 5 ? 1 : 0,
                 transition: 'opacity 1000ms ease-in-out',
               }}
             >
