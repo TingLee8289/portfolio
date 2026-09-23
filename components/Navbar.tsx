@@ -1,24 +1,30 @@
 import React, { useState } from 'react';
-import { 
-  User, 
-  Code2, 
-  Briefcase, 
-  Menu, 
+import {
+  User,
+  Code2,
+  Briefcase,
+  Menu,
   X,
   Terminal,
   GraduationCap
 } from 'lucide-react';
-import { PERSONAL_INFO } from '../constants';
+import { PERSONAL_INFO_BASE } from '../constants';
+import { useLanguage } from '../LanguageContext';
 
 const Navbar: React.FC = () => {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
+  const { language, setLanguage, t } = useLanguage();
 
   const navItems = [
-    { name: 'About', href: '#about', icon: User },
-    { name: 'Skills', href: '#skills', icon: Code2 },
-    { name: 'Experience', href: '#experience', icon: Briefcase },
-    { name: 'Education', href: '#education', icon: GraduationCap },
+    { name: t.ui.nav.about, href: '#about', icon: User },
+    { name: t.ui.nav.skills, href: '#skills', icon: Code2 },
+    { name: t.ui.nav.experience, href: '#experience', icon: Briefcase },
+    { name: t.ui.nav.education, href: '#education', icon: GraduationCap },
   ];
+
+  const toggleLanguage = () => setLanguage(language === 'zh' ? 'en' : 'zh');
+  const languageButtonLabel = language === 'zh' ? 'EN' : '中';
+  const languageButtonTitle = language === 'zh' ? 'Switch to English' : '切換為中文';
 
   return (
     <>
@@ -28,11 +34,11 @@ const Navbar: React.FC = () => {
           <a
             href="#info"
             className="p-2 mb-2 group relative"
-            aria-label="Info"
+            aria-label={t.ui.nav.info}
           >
             <Terminal className="w-8 h-8 text-vscode-accent" />
             <span className="absolute left-14 top-2 bg-vscode-sidebar text-white text-xs px-2 py-1 rounded border border-white/10 opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity whitespace-nowrap z-50">
-              Info
+              {t.ui.nav.info}
             </span>
           </a>
           {navItems.map((item) => {
@@ -54,10 +60,18 @@ const Navbar: React.FC = () => {
           })}
         </div>
         <div className="flex flex-col items-center gap-6 pb-4">
+           <button
+             onClick={toggleLanguage}
+             className="w-8 h-8 flex items-center justify-center rounded border border-white/10 text-gray-400 hover:text-white hover:border-vscode-accent font-mono text-[10px] transition-colors"
+             aria-label="Toggle language"
+             title={languageButtonTitle}
+           >
+             {languageButtonLabel}
+           </button>
            <div className="p-3 cursor-pointer opacity-80 hover:opacity-100 transition-opacity">
-             <img 
-               src={PERSONAL_INFO.logo} 
-               alt="Settings" 
+             <img
+               src={PERSONAL_INFO_BASE.logo}
+               alt="Settings"
                className="w-8 h-8 rounded-full border-2 border-transparent hover:border-vscode-accent transition-colors object-cover"
              />
            </div>
@@ -71,12 +85,22 @@ const Navbar: React.FC = () => {
             <Terminal className="w-6 h-6 text-vscode-accent" />
             <span className="font-mono font-bold text-white">Wan-Ting.dev</span>
           </a>
-          <button 
-            onClick={() => setIsMobileOpen(!isMobileOpen)}
-            className="text-gray-300 hover:text-white"
-          >
-            {isMobileOpen ? <X /> : <Menu />}
-          </button>
+          <div className="flex items-center gap-3">
+            <button
+              onClick={toggleLanguage}
+              className="w-8 h-8 flex items-center justify-center rounded border border-white/10 text-gray-300 hover:text-white hover:border-vscode-accent font-mono text-[10px] transition-colors"
+              aria-label="Toggle language"
+              title={languageButtonTitle}
+            >
+              {languageButtonLabel}
+            </button>
+            <button
+              onClick={() => setIsMobileOpen(!isMobileOpen)}
+              className="text-gray-300 hover:text-white"
+            >
+              {isMobileOpen ? <X /> : <Menu />}
+            </button>
+          </div>
         </div>
 
         {/* Mobile Menu Dropdown */}
@@ -92,6 +116,12 @@ const Navbar: React.FC = () => {
                 <span className="text-vscode-accent mr-2">#</span>{item.name}
               </a>
             ))}
+            <button
+              onClick={() => { toggleLanguage(); setIsMobileOpen(false); }}
+              className="block py-2 text-gray-300 hover:text-white font-mono"
+            >
+              <span className="text-vscode-accent mr-2">#</span>{languageButtonTitle}
+            </button>
           </div>
         )}
       </nav>

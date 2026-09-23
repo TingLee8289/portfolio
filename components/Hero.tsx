@@ -1,15 +1,19 @@
 import React, { useEffect, useState } from 'react';
-import { PERSONAL_INFO, SOCIAL_LINKS } from '../constants';
+import { SOCIAL_LINKS } from '../constants';
+import { useLanguage } from '../LanguageContext';
 import { ArrowDown } from 'lucide-react';
 
 const Hero: React.FC = () => {
+  const { t } = useLanguage();
+  const { personalInfo } = t;
   const [text, setText] = useState('');
   const [windowState, setWindowState] = useState<'visible' | 'minimized' | 'closed'>('visible');
   const [theme, setTheme] = useState<'vscode' | 'darcula'>('vscode');
-  
-  const fullText = `> const engineer = new FullStackDeveloper("${PERSONAL_INFO.name}");\n> "Loading: ${PERSONAL_INFO.tagline}..."`;
-  
+
+  const fullText = `> const engineer = new FullStackDeveloper("${personalInfo.name}");\n> "${t.ui.hero.loadingLabel} ${personalInfo.tagline}..."`;
+
   useEffect(() => {
+    setText('');
     let index = 0;
     const timer = setInterval(() => {
       setText(fullText.slice(0, index));
@@ -38,7 +42,7 @@ const Hero: React.FC = () => {
         isVisible ? 'min-h-screen pt-16 md:pt-0 opacity-100' : 'min-h-0 h-0 opacity-0 pt-0'
       }`}
     >
-      
+
       {/* Mesh Gradient Background */}
       <div className="absolute inset-0 bg-vscode-bg transition-colors duration-300">
         <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-vscode-accent/10 rounded-full blur-[120px] pointer-events-none mix-blend-screen transition-colors duration-300"></div>
@@ -46,31 +50,31 @@ const Hero: React.FC = () => {
       </div>
 
       <div className="w-full max-w-4xl px-4 md:px-8 relative z-10">
-        
+
         {/* Terminal Window */}
-        <div 
+        <div
           className={`glass-panel rounded-lg overflow-hidden shadow-2xl origin-bottom transition-all duration-500 ease-in-out ${
-            windowState === 'closed' ? 'opacity-0 scale-95 pointer-events-none' : 
-            windowState === 'minimized' ? 'opacity-0 scale-0 translate-y-24 pointer-events-none' : 
+            windowState === 'closed' ? 'opacity-0 scale-95 pointer-events-none' :
+            windowState === 'minimized' ? 'opacity-0 scale-0 translate-y-24 pointer-events-none' :
             'animate-fade-in-up'
           }`}
         >
           {/* Terminal Header */}
-          <div 
+          <div
             className="bg-vscode-activity px-4 py-2 flex items-center gap-2 border-b border-white/5 transition-colors duration-300"
           >
             <div className="flex gap-2 window-control">
-              <div 
+              <div
                 onClick={() => setWindowState('closed')}
                 className="w-3 h-3 rounded-full bg-red-500/80 hover:bg-red-600 cursor-pointer transition-colors"
                 title="Close"
               ></div>
-              <div 
+              <div
                 onClick={() => setWindowState('minimized')}
                 className="w-3 h-3 rounded-full bg-yellow-500/80 hover:bg-yellow-600 cursor-pointer transition-colors"
                 title="Minimize"
               ></div>
-              <div 
+              <div
                 onClick={toggleTheme}
                 className="w-3 h-3 rounded-full bg-green-500/80 hover:bg-green-600 cursor-pointer transition-colors group relative"
                 title="Toggle Theme"
@@ -85,8 +89,8 @@ const Hero: React.FC = () => {
           {/* Terminal Body */}
           <div className="p-6 md:p-10 min-h-[300px] font-mono text-sm md:text-lg">
             <div className="whitespace-pre-wrap leading-relaxed">
-              <div className="text-vscode-comment mb-2"># Welcome to my portfolio</div>
-              
+              <div className="text-vscode-comment mb-2">{t.ui.hero.welcomeComment}</div>
+
               {/* Line 1 */}
               <div>
                  <span className="text-vscode-text select-none mr-2">{'>'}</span>
@@ -98,7 +102,7 @@ const Hero: React.FC = () => {
                      <span className="text-vscode-keyword">new </span>
                      <span className="text-vscode-class">FullStackDeveloper</span>
                      <span className="text-vscode-text">(</span>
-                     <span className="text-vscode-string">"{PERSONAL_INFO.name}"</span>
+                     <span className="text-vscode-string">"{personalInfo.name}"</span>
                      <span className="text-vscode-text">);</span>
                    </>
                  )}
@@ -129,14 +133,14 @@ const Hero: React.FC = () => {
               }}
             >
               <h1 className="text-3xl md:text-5xl font-bold text-white mb-2">
-                {PERSONAL_INFO.chineseName} <span className="text-vscode-accent font-mono text-2xl md:text-4xl">"{PERSONAL_INFO.name}"</span>
+                {personalInfo.chineseName} <span className="text-vscode-accent font-mono text-2xl md:text-4xl">"{personalInfo.name}"</span>
               </h1>
               <div className="border-l-4 border-vscode-accent pl-4 mb-6">
                 <p className="text-white text-lg md:text-xl font-medium tracking-wide">
-                  {PERSONAL_INFO.title}
+                  {personalInfo.title}
                 </p>
                 <p className="text-gray-400 text-sm mt-1">
-                  {PERSONAL_INFO.subTitle}
+                  {personalInfo.subTitle}
                 </p>
               </div>
 

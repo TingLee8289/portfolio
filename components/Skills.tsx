@@ -1,13 +1,16 @@
 import React from 'react';
 import { SKILL_GROUPS } from '../constants';
+import { useLanguage } from '../LanguageContext';
 
 const TechStack: React.FC = () => {
+  const { t } = useLanguage();
+
   return (
     <section id="skills" className="py-24 bg-vscode-activity/30 border-y border-white/5">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center gap-3 mb-12">
             <span className="text-vscode-accent font-mono text-xl">02.</span>
-            <h2 className="text-3xl font-bold text-white">Skills</h2>
+            <h2 className="text-3xl font-bold text-white">{t.ui.sections.skills.heading}</h2>
             <div className="h-px bg-white/10 flex-1"></div>
           </div>
 

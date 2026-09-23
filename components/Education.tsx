@@ -1,16 +1,19 @@
 import React from 'react';
-import { EDUCATION_DATA } from '../constants';
+import { useLanguage } from '../LanguageContext';
 import { ArrowRight } from 'lucide-react';
 
 const Education: React.FC = () => {
+  const { t } = useLanguage();
+  const EDUCATION_DATA = t.education;
+
   return (
     <section id="education" className="py-24">
       <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-        
+
         {/* Section Header */}
         <div className="flex items-center gap-3 mb-16">
           <span className="text-vscode-accent font-mono text-xl">04.</span>
-          <h2 className="text-3xl font-bold text-white">Education</h2>
+          <h2 className="text-3xl font-bold text-white">{t.ui.sections.education.heading}</h2>
           <div className="h-px bg-white/10 flex-1"></div>
         </div>
 
@@ -29,17 +32,17 @@ const Education: React.FC = () => {
                 {/* Content */}
                 <div className="flex-1 glass-panel p-6 rounded-xl hover:bg-white/5 transition-colors border-l-4 border-l-vscode-accent/50 hover:border-l-vscode-accent">
                   <div className="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-4 mb-5">
-                    <div className="flex items-center gap-3.5">
+                    <div className="flex items-center gap-3.5 min-w-0 flex-1">
                       {edu.logo && (
                         <div className="w-12 h-12 rounded-lg bg-white p-1.5 shrink-0 flex items-center justify-center border border-white/10 shadow-sm overflow-hidden">
-                          <img 
-                            src={edu.logo} 
-                            alt={edu.school} 
+                          <img
+                            src={edu.logo}
+                            alt={edu.school}
                             className="max-h-full max-w-full object-contain"
                           />
                         </div>
                       )}
-                      <div>
+                      <div className="min-w-0">
                         <h3 className="text-lg sm:text-xl font-bold text-white flex items-center gap-2 flex-wrap">
                           <span>{edu.school}</span>
                           <span className="text-vscode-accent font-mono text-sm sm:text-base">| {edu.degree}</span>
