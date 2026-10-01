@@ -153,7 +153,7 @@ export const zhContent: PortfolioContent = {
       info: "資訊",
       about: "關於",
       skills: "技能",
-      experience: "經歷",
+      experience: "工作經歷",
       education: "學歷",
     },
     sections: {
@@ -164,7 +164,11 @@ export const zhContent: PortfolioContent = {
     },
     hero: {
       welcomeComment: "# Welcome to my portfolio",
-      loadingLabel: "Loading:",
+      headlineRole: "全端開發工程師",
+      headlineName: "李宛庭",
+      headlineTail: "用資料看問題，用程式解問題。",
+      cta: "查看工作經歷",
+      location: "Taoyuan, Taiwan",
     },
     footer: {
       rights: "All Rights Reserved",

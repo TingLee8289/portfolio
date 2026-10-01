@@ -99,7 +99,11 @@ export interface UIStrings {
   };
   hero: {
     welcomeComment: string;
-    loadingLabel: string;
+    headlineRole: string;
+    headlineName: string;
+    headlineTail: string;
+    cta: string;
+    location: string;
   };
   footer: {
     rights: string;

@@ -69,12 +69,6 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 
   const t = CONTENT[language];
 
-  useEffect(() => {
-    document.documentElement.lang = language === 'zh' ? 'zh-Hant' : 'en';
-    document.title = t.ui.seo.title;
-    document.querySelector('meta[name="description"]')?.setAttribute('content', t.ui.seo.description);
-  }, [language, t]);
-
   return (
     <LanguageContext.Provider value={{ language, setLanguage, t }}>
       {children}

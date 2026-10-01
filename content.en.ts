@@ -164,7 +164,11 @@ export const enContent: PortfolioContent = {
     },
     hero: {
       welcomeComment: "# Welcome to my portfolio",
-      loadingLabel: "Loading:",
+      headlineRole: "A Full-Stack Developer",
+      headlineName: "Wan-Ting Lee",
+      headlineTail: "reads problems in data and solves them in code.",
+      cta: "See Experience",
+      location: "Taoyuan, Taiwan",
     },
     footer: {
       rights: "All Rights Reserved",
