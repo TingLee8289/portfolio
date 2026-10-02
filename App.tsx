@@ -1,27 +1,23 @@
-import React, { Suspense, lazy, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { Route, Routes, useLocation } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import Footer from './components/Footer';
 import { useLanguage } from './LanguageContext';
+import { getPageTitle } from './routeMeta';
 
-const About = lazy(() => import('./components/About'));
-const TechStack = lazy(() => import('./components/Skills'));
-const Experience = lazy(() => import('./components/Experience'));
-const Education = lazy(() => import('./components/Education'));
+import About from './components/About';
+import TechStack from './components/Skills';
+import Experience from './components/Experience';
+import Education from './components/Education';
+import Projects from './components/Projects';
+import ProjectMonitoring from './components/ProjectMonitoring';
 
 declare global {
   interface Window {
     gtag?: (...args: unknown[]) => void;
   }
 }
-
-const NAV_KEY_BY_PATH: Record<string, 'about' | 'skills' | 'experience' | 'education'> = {
-  '/about': 'about',
-  '/skills': 'skills',
-  '/experience': 'experience',
-  '/education': 'education',
-};
 
 // Scroll reset, per-page <title>/description and GA4 page_view on route change.
 const RouteEffects: React.FC = () => {
@@ -33,10 +29,8 @@ const RouteEffects: React.FC = () => {
   }, [pathname]);
 
   useEffect(() => {
-    const navKey = NAV_KEY_BY_PATH[pathname];
-    const title = navKey ? `${t.ui.nav[navKey]} | ${t.ui.seo.title}` : t.ui.seo.title;
     document.documentElement.lang = language === 'zh' ? 'zh-Hant' : 'en';
-    document.title = title;
+    document.title = getPageTitle(pathname, t);
     document.querySelector('meta[name="description"]')?.setAttribute('content', t.ui.seo.description);
   }, [pathname, language, t]);
 
@@ -60,18 +54,18 @@ const App: React.FC = () => {
       <RouteEffects />
       <Navbar />
       <main className="flex-1 md:ml-16 w-full flex flex-col">
-        <Suspense fallback={null}>
           <div key={pathname} className="flex-1 animate-fade-in-up">
             <Routes>
               <Route path="/" element={<Hero />} />
               <Route path="/about" element={<About />} />
               <Route path="/skills" element={<TechStack />} />
               <Route path="/experience" element={<Experience />} />
+              <Route path="/projects" element={<Projects />} />
+              <Route path="/projects/monitoring" element={<ProjectMonitoring />} />
               <Route path="/education" element={<Education />} />
               <Route path="*" element={<Hero />} />
             </Routes>
           </div>
-        </Suspense>
         {!isHome && <Footer />}
       </main>
     </div>

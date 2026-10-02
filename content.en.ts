@@ -45,7 +45,7 @@ export const enContent: PortfolioContent = {
         { text: "Built OpenSearch API latency dashboards to track API and DB call durations across nodes, accelerating incident diagnosis." },
         { text: "Introduced Spec-Driven Development (SDD) and automated front-end/back-end testing (Playwright, Selenium, JUnit)." },
         { text: "Refactored project APIs using Design Patterns, speeding up onboarding of new integrations and reducing logic errors." },
-        { text: "Built a scheduled monitoring system that automatically sends email/SMS alerts when DB or log conditions are met." },
+        { text: "Built a scheduled monitoring system that automatically sends email/SMS alerts when DB or log conditions are met.", detailPath: "/projects/monitoring" },
         { projectId: "aiMeetingNote", projectLabel: "AI Meeting Note", text: "A multilingual speech-to-text transcription platform." },
         { text: "Developed notification center push APIs, designing a cross-device push and read-status mechanism for Web and App clients." }
       ],
@@ -76,91 +76,97 @@ export const enContent: PortfolioContent = {
       tech: ["0.4um BCD Process", "Automotive & Commercial", "NTO", "Inline Measurement", "WAT", "Yield Excursion"]
     }
   ],
-  projects: [
-    {
-      title: "Direct Carrier Billing Platform (DCBP)",
-      subtitle: "Telecom Direct-Carrier-Billing & Multi-Channel Payment Platform / Core Architecture & API Gateway",
-      description: "An integrated platform for OTT subscriptions, parking-fee collection, and prayer-lamp donations, connecting multiple core telecom billing systems and exposing highly available APIs to external vendors.",
-      features: [
-        "Built OpenSearch API latency dashboards for real-time tracking of API and DB call durations across nodes, dramatically speeding up incident diagnosis",
-        "Introduced Spec-Driven Development (SDD) and automated front-end/back-end testing (Playwright, Selenium, JUnit)",
-        "Refactored project APIs using Design Patterns, significantly speeding up onboarding of third-party integrations and reducing logic errors",
-        "Built a highly reliable scheduled monitoring system that automatically sends Email/SMS alerts when DB anomalies or log keywords cross defined thresholds"
+  monitoringCase: {
+    title: "Scheduled Monitoring & Alerting System",
+    subtitle: "Condition-based monitoring of DB and logs, with automatic email and SMS alerts",
+    summary: "Runs scheduled checks against two data sources, a database and logs, using configurable monitoring rules, and automatically notifies the right people when a condition is met. Each rule has its own data source, time window, threshold and recipients, a suppression window stops the same person from being notified repeatedly on the same channel, and a distributed lock prevents the same rule from running twice.",
+    role: "Senior Engineer (Requirements Analysis, Architecture Design, Development, Testing)",
+    tech: ["Java", "Spring Boot", "PostgreSQL", "OpenSearch", "Distributed Lock", "Scheduler", "Email", "SMS"],
+    problem: {
+      heading: "The Problem",
+      body: [
+        "When a system misbehaves, relying on people to query the database or dig through logs means problems are noticed late.",
+        "This system turns \"what to check, where to check, how many records within what time, and who to notify\" into configurable rules. A scheduler runs them automatically and notifies the right people as soon as a condition is met.",
+        "Another problem is over-alerting: while a condition keeps holding, notifying on every scheduler run means the same people keep receiving repeat messages. A suppression mechanism keeps the same person from being notified again on the same channel within the suppression window."
       ],
-      explanation: "As Taiwan Mobile's core billing platform, this system handles direct-carrier billing for mobile numbers and supports high-concurrency telecom payment deductions. Built on a microservices architecture with Kubernetes and Argo CD for continuous integration and delivery, with high availability and agile extensibility maintained through an OpenSearch monitoring stack and Design Pattern-driven refactoring.",
-      role: "Senior Engineer (Requirements Analysis, Architecture Design, Development, Testing & Operations)",
-      techStack: ["Java", "Spring Boot", "PostgreSQL", "OpenSearch", "Docker", "Kubernetes", "Argo CD", "Playwright", "Selenium", "JUnit", "SDD"],
-      demoUrl: "https://dcb.oppay.tw/",
-      image: "https://dcb.oppay.tw/logo/logo_dcb.svg"
     },
-    {
-      title: "AI Meeting Note",
-      subtitle: "Multilingual Speech-to-Text Platform / Notification Center & Push Service",
-      description: "A multilingual speech-to-text meeting-transcription platform helping businesses and individuals achieve highly accurate voice recording and intelligent organization.",
-      features: [
-        "Designed and developed a cross-platform Notification Center push API",
-        "Architected a cross-device real-time push and read-status sync mechanism for Web and App scenarios",
-        "Supported high-concurrency real-time notification delivery with precise multi-device state synchronization"
+    flow: {
+      heading: "How It Works",
+      steps: [
+        { title: "Scheduler fires", desc: "Each rule is triggered on its own schedule." },
+        { title: "Acquire lock", desc: "Take the rule's distributed lock so only one worker handles that rule at a time." },
+        { title: "Load rule", desc: "Read the rule: data source, query, time window, threshold and recipients." },
+        { title: "Query the source", desc: "DB rules query PostgreSQL; log rules query OpenSearch." },
+        { title: "Evaluate", desc: "Count matches within the time window and compare against the threshold." },
+        { title: "Check suppression", desc: "For each recipient and each channel, check whether they were already notified within the suppression window, and skip them if so." },
+        { title: "Notify", desc: "When the condition is met, send email or SMS to recipients that are not suppressed, and record the notification time." },
+        { title: "Release lock", desc: "Release the lock once processing is done." },
       ],
-      explanation: "Built the core notification architecture for a smart meeting-transcription platform, connecting multi-terminal real-time push mechanisms so users can seamlessly receive transcription-progress notifications across desktop web and mobile app — delivering a truly consistent cross-device experience.",
-      role: "Senior Engineer (System Analysis, Push Architecture Design, API Development)",
-      techStack: ["Java", "Spring Boot", "PostgreSQL", "WebSocket", "Push Notification", "Kubernetes", "Multi-Device Sync"],
-      demoUrl: "https://www.twmsolution.com/ebgp/ai_votexai",
-      image: "https://twmprod.meeting.t-mchat.com/img/nav-logo.png"
     },
-    {
-      title: "Photolithography Anomaly Detection System",
-      subtitle: "Photolithography Non-Correctable Error Ink-Out System (TSMC)",
-      description: "A wafer photolithography anomaly detection and auto-exclusion system built for TSMC's 12-inch R&D fab 3nm & 5nm advanced processes.",
-      features: [
-        "Reduced potential reliability-failure risk by ~1/3 (<0.2% yield loss)",
-        "High-precision algorithmic detection and spatial ink-out marking of photolithography non-correctable errors",
-        "Proven effective and later officially adopted by other TSMC fabs"
+    rules: {
+      heading: "Flexible Monitoring Rules",
+      intro: "Every rule is an independent configuration. Different rules can use different data sources, time windows, thresholds and recipients.",
+      fields: [
+        { name: "Data source", desc: "DB or log" },
+        { name: "Query", desc: "Which records or log entries to count" },
+        { name: "Time window", desc: "For example the last 3 days or 7 days" },
+        { name: "Threshold", desc: "For example more than 5 matches" },
+        { name: "Recipients", desc: "Each person's own name, email and phone number" },
+        { name: "Channels", desc: "Email, SMS" },
+        { name: "Suppression on/off", desc: "Whether suppression is enabled for the rule" },
+        { name: "Suppression window", desc: "How long to stay silent after notifying the same person on the same channel" },
       ],
-      explanation: "In advanced 3nm and 5nm R&D processes, photolithography non-correctable errors can lead to reliability failures during packaging and test. A self-developed spatial recognition and detection system identifies and excludes defective regions early, contributing meaningfully to stable ramp-up of advanced processes.",
-      role: "Process Integration Engineer / System Developer",
-      techStack: ["Python", "Algorithm", "Photolithography", "Yield Optimization", "SPC", "TSMC 3nm/5nm R&D"]
+      scenariosHeading: "Example of Changing a Rule",
+      scenarios: [
+        { label: "Today", text: "Notify when more than 5 records appear within 3 days." },
+        { label: "Tomorrow", text: "Change it to notify only when more than 5 records appear within 7 days." },
+      ],
     },
-    {
-      title: "SAS EG Automated Data Pipeline & SPC Chart Platform",
-      subtitle: "Systematized SPC Chart & Auto Report (TSMC)",
-      description: "An automated daily large-scale data-retrieval, statistical process control (SPC) charting, and auto-report-generation system for TSMC's advanced processes.",
-      features: [
-        "Reduced manual effort by ~95%, freeing up significant engineer productivity",
-        "Automatically retrieved and cleaned massive volumes of measurement data from production line databases on a daily schedule",
-        "Improved SPC chart quality and anomaly-trend detection sensitivity through standardized charting logic"
+    suppression: {
+      heading: "Suppressing Repeat Notifications",
+      intro: "While a condition keeps holding, every scheduler run sees it as an anomaly. Notifying on every run would keep bothering the same people, so each rule has a configurable suppression window.",
+      points: [
+        "Each rule can turn suppression on or off; when it is off, no suppression check is made.",
+        "When on, suppression is decided per recipient and per channel.",
+        "Once someone has been notified on a channel within the window, they are not notified again until the window has passed.",
+        "A person's email and SMS are tracked separately and do not affect each other.",
       ],
-      explanation: "What previously required engineers to spend hours each day manually querying, charting, and compiling process-control reports was transformed into a fully automated data pipeline via SAS EG scheduling and automation scripts, ensuring daily R&D and production decisions were backed by real-time, standardized, and highly accurate data.",
-      role: "Process Integration Engineer / Automation Developer",
-      techStack: ["SAS EG", "Automation", "Data Pipelines", "SPC Analysis", "Yield Management"]
     },
-    {
-      title: "8-inch BCD Process NTO & Inline / WAT Measurement System",
-      subtitle: "New Tape-Out & Inline / WAT Platform (VIS)",
-      description: "Process integration, New Tape-Out (NTO) flow setup, and electrical measurement systems for VIS's 8-inch 0.4um BCD commercial and automotive-grade products.",
-      features: [
-        "Established a complete New Tape-Out (NTO) process flow standard and inline/WAT electrical measurement programs",
-        "Rapidly diagnosed and resolved WAT and yield excursion root causes",
-        "Met stringent voltage-tolerance and interference-resistance reliability standards for automotive and commercial chips"
+    locking: {
+      heading: "Multithreading & Distributed Lock",
+      intro: "The scheduler can fire on several threads and several nodes at once. If the same rule ran concurrently, one anomaly would be checked and notified more than once.",
+      points: [
+        "A distributed lock is taken per rule, so only one worker can process that rule at a time.",
+        "A worker that does not get the lock does not run the rule, so no duplicate notifications are sent.",
+        "Different rules do not block each other and can still run in parallel.",
       ],
-      explanation: "Responsible for 0.4um BCD high-voltage process integration for automotive electronics and power-management ICs, establishing a complete standard from wafer measurement through yield monitoring, ensuring smooth pilot runs and consistently meeting automotive-grade yield targets for new products.",
-      role: "Process Integration Engineer",
-      techStack: ["0.4um BCD", "WAT Testing", "NTO Process", "Inline Measurement", "Yield Excursion"]
-    }
-  ],
+    },
+  },
   ui: {
     nav: {
       info: "Info",
       about: "About",
       skills: "Skills",
       experience: "Experience",
+      projects: "Projects",
       education: "Education",
     },
     sections: {
       about: { heading: "About Me" },
       skills: { heading: "Skills" },
       experience: { heading: "Experience" },
+      projects: { heading: "Projects" },
       education: { heading: "Education" },
+    },
+    projectsPage: {
+      viewCase: "Read the case study",
+      backToProjects: "Back to projects",
+      roleLabel: "Role",
+      techLabel: "Tech",
+      configTitle: "Example rule configuration",
+      configNote: "Illustrative configuration only. Names, emails and phone numbers are made up.",
+      lockWorkerA: "Worker A: gets the lock, runs the rule",
+      lockWorkerB: "Worker B: no lock, does not run",
     },
     hero: {
       welcomeComment: "# Welcome to my portfolio",

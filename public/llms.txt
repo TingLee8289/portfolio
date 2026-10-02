@@ -8,6 +8,8 @@
 - [About](https://tingwtlee.dev/about): Background spanning advanced semiconductor process integration and full-stack software development.
 - [Skills](https://tingwtlee.dev/skills): Technology stack grouped by area.
 - [Experience](https://tingwtlee.dev/experience): Work history at Taiwan Mobile, TSMC and VIS, with project highlights.
+- [Projects](https://tingwtlee.dev/projects): Project showcase.
+- [Scheduled Monitoring & Alerting System](https://tingwtlee.dev/projects/monitoring): Case study of a rule-based system that monitors a database and logs and sends email/SMS alerts, with a suppression window to avoid repeat notifications and a distributed lock to avoid duplicate runs.
 - [Education](https://tingwtlee.dev/education): Linköping University (M.S.) and National Tsing Hua University (B.S.).
 
 ## Optional

@@ -21,6 +21,16 @@
     <priority>0.8</priority>
   </url>
   <url>
+    <loc>https://tingwtlee.dev/projects</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://tingwtlee.dev/projects/monitoring</loc>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  <url>
     <loc>https://tingwtlee.dev/education</loc>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>

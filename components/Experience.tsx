@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { PROJECT_LINKS } from '../constants';
 import { useLanguage } from '../LanguageContext';
 import { Briefcase, ArrowRight, ExternalLink } from 'lucide-react';
@@ -87,6 +88,15 @@ const Experience: React.FC = () => {
                               </>
                             ) : (
                               <span>{bullet.text}</span>
+                            )}
+                            {bullet.detailPath && (
+                              <Link
+                                to={bullet.detailPath}
+                                className="ml-2 inline-flex items-center gap-1 text-sm font-mono text-vscode-accent hover:text-white transition-colors whitespace-nowrap"
+                              >
+                                {t.ui.projectsPage.viewCase}
+                                <ArrowRight className="w-3.5 h-3.5" />
+                              </Link>
                             )}
                           </div>
                         </li>

@@ -27,6 +27,7 @@ export interface SkillGroup {
 export interface ExperienceBullet {
   text: string;
   projectId?: string;
+  detailPath?: string; // Internal route with a full write-up of this bullet
   projectLabel?: string;
 }
 
@@ -56,19 +57,6 @@ export interface StatItem {
   icon: LucideIcon;
 }
 
-export interface ProjectItem {
-  title: string;
-  subtitle?: string; // New field for the second line
-  description: string; // Used for "System"
-  features?: string[]; // Used for "Features"
-  explanation?: string; // Used for "Project Description"
-  role?: string;
-  techStack: string[];
-  repoUrl?: string;
-  demoUrl?: string;
-  image?: string;
-}
-
 export interface PersonalInfo {
   name: string;
   chineseName: string;
@@ -89,13 +77,25 @@ export interface UIStrings {
     about: string;
     skills: string;
     experience: string;
+    projects: string;
     education: string;
   };
   sections: {
     about: { heading: string };
     skills: { heading: string };
     experience: { heading: string };
+    projects: { heading: string };
     education: { heading: string };
+  };
+  projectsPage: {
+    viewCase: string;
+    backToProjects: string;
+    roleLabel: string;
+    techLabel: string;
+    configTitle: string;
+    configNote: string;
+    lockWorkerA: string;
+    lockWorkerB: string;
   };
   hero: {
     welcomeComment: string;
@@ -114,11 +114,30 @@ export interface UIStrings {
   };
 }
 
+export interface CaseStudy {
+  title: string;
+  subtitle: string;
+  summary: string;
+  role: string;
+  tech: string[];
+  problem: { heading: string; body: string[] };
+  flow: { heading: string; steps: { title: string; desc: string }[] };
+  rules: {
+    heading: string;
+    intro: string;
+    fields: { name: string; desc: string }[];
+    scenariosHeading: string;
+    scenarios: { label: string; text: string }[];
+  };
+  suppression: { heading: string; intro: string; points: string[] };
+  locking: { heading: string; intro: string; points: string[] };
+}
+
 export interface PortfolioContent {
   personalInfo: PersonalInfo;
   stats: StatItem[];
   education: EducationItem[];
   experience: ExperienceItem[];
-  projects: ProjectItem[];
+  monitoringCase: CaseStudy;
   ui: UIStrings;
 }

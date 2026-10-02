@@ -7,7 +7,8 @@ import {
   Menu,
   X,
   Terminal,
-  GraduationCap
+  GraduationCap,
+  FolderKanban
 } from 'lucide-react';
 import { PERSONAL_INFO_BASE } from '../constants';
 import { useLanguage } from '../LanguageContext';
@@ -21,6 +22,7 @@ const Navbar: React.FC = () => {
     { name: t.ui.nav.about, href: '/about', icon: User },
     { name: t.ui.nav.skills, href: '/skills', icon: Code2 },
     { name: t.ui.nav.experience, href: '/experience', icon: Briefcase },
+    { name: t.ui.nav.projects, href: '/projects', icon: FolderKanban },
     { name: t.ui.nav.education, href: '/education', icon: GraduationCap },
   ];
 

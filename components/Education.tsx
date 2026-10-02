@@ -12,7 +12,7 @@ const Education: React.FC = () => {
 
         {/* Section Header */}
         <div className="flex items-center gap-3 mb-16">
-          <span className="text-vscode-accent font-mono text-xl">04.</span>
+          <span className="text-vscode-accent font-mono text-xl">05.</span>
           <h2 className="text-3xl font-bold text-white">{t.ui.sections.education.heading}</h2>
           <div className="h-px bg-white/10 flex-1"></div>
         </div>

@@ -45,7 +45,7 @@ export const zhContent: PortfolioContent = {
         { text: "建置 OpenSearch API Latency Dashboards，並追蹤各節點 API、DB 呼叫耗時，加速異常排查效率。" },
         { text: "導入 SDD (Spec-Driven Development) 開發流程及前後端自動化測試 (Playwright, Selenium, JUnit)。" },
         { text: "導入 Design Patterns 重構專案 API，加快後續服務接入速度並降低邏輯錯誤。" },
-        { text: "建立排程監控系統，於 DB、Log 符合設定條件時自動發送 email 或簡訊通知。" },
+        { text: "建立排程監控與告警系統，於 DB、Log 符合設定條件時自動發送 email 或簡訊通知。", detailPath: "/projects/monitoring" },
         { projectId: "aiMeetingNote", projectLabel: "AI 聽寫大哥", text: "提供多國語音轉文字之記錄平台。" },
         { text: "開發通知中心推播功能 API，因應 Web／App 多裝置情境設計全裝置推播及已讀機制。" }
       ],
@@ -76,91 +76,97 @@ export const zhContent: PortfolioContent = {
       tech: ["0.4um BCD Process", "Automotive & Commercial", "NTO", "Inline Measurement", "WAT", "Yield Excursion"]
     }
   ],
-  projects: [
-    {
-      title: "大哥付隨帳收 Direct Carrier Billing Platform (DCBP)",
-      subtitle: "電信隨帳收與多元金流整合平台 / Core Architecture & API Gateway",
-      description: "OTT 申辦、停車代收、點燈祈福整合平台，串接多套電信核心帳務系統並提供高可用外部廠商 API。",
-      features: [
-        "建置 OpenSearch API Latency Dashboards，即時追蹤各節點 API 與 DB 呼叫耗時，倍數加速異常排查",
-        "導入 SDD (Spec-Driven Development) 開發流程與前後端自動化測試 (Playwright, Selenium, JUnit)",
-        "導入 Design Patterns 重構專案 API，大幅加快後續第三方合作服務接入速度並降低邏輯錯誤",
-        "建立高可靠排程監控系統，於 DB 異常或 Log 關鍵字符合觸發門檻時自動即時發送 Email / SMS 告警"
+  monitoringCase: {
+    title: "排程監控與告警系統",
+    subtitle: "針對 DB 與 Log 的條件監控，自動發送 Email 與簡訊通知",
+    summary: "針對 DB 與 Log 兩種資料源，依可設定的監控規則排程檢查，條件成立時自動通知指定人員。每條規則的資料源、時間範圍、門檻與告警人員都能獨立調整，同一位人員在同一個通知管道上設有抑制時間，避免重複打擾，並以分散式 lock 避免同一規則被重複執行。",
+    role: "Senior Engineer（需求分析、架構設計、開發、測試）",
+    tech: ["Java", "Spring Boot", "PostgreSQL", "OpenSearch", "Distributed Lock", "Scheduler", "Email", "SMS"],
+    problem: {
+      heading: "要解決的問題",
+      body: [
+        "系統出現異常時，如果只靠人工查詢資料庫或翻找 Log，很容易延遲發現。",
+        "這個系統把「查什麼、查哪裡、多久內超過幾筆、要通知誰」變成可設定的規則，由排程自動檢查，條件成立時立刻通知相關人員。",
+        "另一個問題是告警過度打擾：條件持續成立時，如果每一輪排程都通知，同一批人會不斷收到重複的通知。因此系統提供抑制機制，讓同一人、同一通知管道在抑制時間內不會被重複通知。"
       ],
-      explanation: "作為台灣大哥大核心金流平台，串接電信門號隨帳代收代付，支援高並發電信代扣扣款。以微服務架構搭配 Kubernetes 與 Argo CD 實現持續整合與部署，並透過 OpenSearch 監控體系與 Design Patterns 重構維護高可用性與敏捷擴充能力。",
-      role: "資深工程師 (需求分析、架構設計、程式開發、測試及維運)",
-      techStack: ["Java", "Spring Boot", "PostgreSQL", "OpenSearch", "Docker", "Kubernetes", "Argo CD", "Playwright", "Selenium", "JUnit", "SDD"],
-      demoUrl: "https://dcb.oppay.tw/",
-      image: "https://dcb.oppay.tw/logo/logo_dcb.svg"
     },
-    {
-      title: "AI 聽寫大哥 AI Meeting Note",
-      subtitle: "多國語音轉文字記錄平台 / Notification Center & Push Service",
-      description: "提供多國語言語音轉文字之會議記錄平台，協助企業與個人實現高精準度語音記錄與智能整理。",
-      features: [
-        "設計並開發跨平台通知中心 (Notification Center) 推播功能 API",
-        "因應 Web / App 多裝置跨設備情境，架構全裝置即時推播與已讀狀態同步機制",
-        "支援高並發即時通知派送與使用者多端狀態精確同步"
+    flow: {
+      heading: "運作流程",
+      steps: [
+        { title: "排程觸發", desc: "依各規則的排程時間，逐條觸發檢查。" },
+        { title: "取得 Lock", desc: "先取得該規則的分散式 lock，確保同一時間只有一個執行者處理這條規則。" },
+        { title: "載入規則", desc: "讀取規則設定：資料源、查詢條件、時間範圍、門檻與告警人員。" },
+        { title: "查詢資料源", desc: "DB 規則查詢 PostgreSQL；Log 規則透過 OpenSearch 查詢。" },
+        { title: "判斷條件", desc: "統計時間範圍內的筆數，判斷是否超過門檻。" },
+        { title: "檢查抑制時間", desc: "針對每位告警人員與每個通知管道，檢查抑制時間內是否已通知過，已通知過就跳過。" },
+        { title: "發送通知", desc: "條件成立時，依規則設定寄送 Email 或簡訊給尚未被抑制的告警人員，並記錄通知時間。" },
+        { title: "釋放 Lock", desc: "處理完成後釋放 lock。" },
       ],
-      explanation: "打造智慧會議記錄平台核心通知架構，串接多終端即時推送機制，讓使用者在電腦網頁版與手機 App 間無縫接收轉錄進度通知與訊息，實現真正全裝置一致的使用者體驗。",
-      role: "資深工程師 (系統分析、推播架構設計、API 開發)",
-      techStack: ["Java", "Spring Boot", "PostgreSQL", "WebSocket", "Push Notification", "Kubernetes", "Multi-Device Sync"],
-      demoUrl: "https://www.twmsolution.com/ebgp/ai_votexai",
-      image: "https://twmprod.meeting.t-mchat.com/img/nav-logo.png"
     },
-    {
-      title: "微影製程異常區域偵測判定系統",
-      subtitle: "Photolithography Non-Correctable Error Ink-Out System (TSMC)",
-      description: "台積電 12 吋 R&D FAB 3nm & 5nm 先進製程專用之晶圓微影異常區域偵測與自動判定排除系統。",
-      features: [
-        "減少 ~1/3 潛在可靠性失效風險 (<0.2% yield loss)",
-        "針對微影不可修正誤差 (Non-correctable error) 進行高精度演算法判定與空間 ink-out 標註",
-        "系統成效顯著並成功推廣被台積電其他生產廠區正式導入使用"
+    rules: {
+      heading: "彈性的監控規則",
+      intro: "每條規則都是一份獨立的設定，不同規則可以有不同的資料源、時間範圍、門檻與告警人員。",
+      fields: [
+        { name: "資料源", desc: "DB 或 Log" },
+        { name: "查詢條件", desc: "要統計哪些資料或哪些 Log" },
+        { name: "時間範圍", desc: "例如最近 3 天、最近 7 天" },
+        { name: "門檻", desc: "例如超過 5 筆" },
+        { name: "告警人員", desc: "每位人員各自的姓名、Email 與電話" },
+        { name: "通知方式", desc: "Email、簡訊" },
+        { name: "是否啟用抑制", desc: "可選擇要不要啟用抑制機制" },
+        { name: "抑制時間", desc: "同一人、同一管道通知後，多久內不再通知" },
       ],
-      explanation: "在先進 3nm 與 5nm 研發製程中，微影不可修正誤差可能在封裝測試階段衍生可靠性失效。透過自行開發之空間辨識判定系統，在早期即精準識別並排除瑕疵區域，為先進製程穩定放量做出重要貢獻。",
-      role: "製程整合工程師 / 系統開發者",
-      techStack: ["Python", "Algorithm", "Photolithography", "Yield Optimization", "SPC", "TSMC 3nm/5nm R&D"]
+      scenariosHeading: "調整規則的例子",
+      scenarios: [
+        { label: "今天", text: "三天內的資料超過 5 筆，就通知。" },
+        { label: "明天", text: "改為七天內的資料超過 5 筆，才通知。" },
+      ],
     },
-    {
-      title: "SAS EG 自動化數據撈取與 SPC 圖表平台",
-      subtitle: "Systematized SPC Chart & Auto Report (TSMC)",
-      description: "台積電先進製程自動化每日巨量資料撈取、統計製程管制 (SPC) 圖表繪製與自動化報告生成系統。",
-      features: [
-        "減少約 95% 人力時間成本，大幅釋放工程師生產力",
-        "每日定時自產線資料庫撈取海量量測數據並自動彙整清洗",
-        "透過標準化圖表邏輯提高 SPC 圖表品質與異常趨勢偵測靈敏度"
+    suppression: {
+      heading: "抑制重複通知",
+      intro: "條件持續成立時，每一輪排程都會判斷為異常。如果每一輪都通知，告警人員會不斷被重複打擾。因此每條規則可以設定抑制時間。",
+      points: [
+        "每條規則可以設定是否啟用抑制；沒有啟用時，不會做抑制判斷。",
+        "啟用後，以「同一位告警人員＋同一個通知管道」為單位判斷。",
+        "在抑制時間內已經通知過，就不會再通知，直到抑制時間結束。",
+        "同一個人的 Email 與簡訊分開計算，不會互相影響。",
       ],
-      explanation: "原先需工程師每日耗時數小時手動查詢、繪製與整理之製程管制報表，透過 SAS EG 排程與自動化腳本轉化為全自動資料流水線，確保每日研發與生產決策獲得即時、標準且高精確度的數據支援。",
-      role: "製程整合工程師 / 自動化開發者",
-      techStack: ["SAS EG", "Automation", "Data Pipelines", "SPC Analysis", "Yield Management"]
     },
-    {
-      title: "8 吋 BCD 製程 NTO 與 inline / WAT 量測系統",
-      subtitle: "New Tape-Out & Inline / WAT Platform (VIS 世界先進)",
-      description: "世界先進 8 吋 0.4um BCD 商用與車用高規格產品製程整合、NTO 流程建立與電性量測系統。",
-      features: [
-        "建立完整 NTO (New Tape-Out) 製程流程規範與 inline / WAT 電性量測程式",
-        "快速進行 WAT 與良率 (Yield) excursion 異常根因排查與製程修復",
-        "落實車用與商規晶片對耐壓與抗干擾之高標準可靠度要求"
+    locking: {
+      heading: "多執行緒與分散式 Lock",
+      intro: "排程可能同時在多個執行緒、多個節點上被觸發。如果同一條規則被同時執行，同一個異常就會被重複檢查、重複通知。",
+      points: [
+        "以規則為單位取得分散式 lock，同一時間只有一個執行者能處理該規則。",
+        "沒有取得 lock 的執行者不會執行該規則，因此不會重複發送通知。",
+        "不同規則之間互不影響，仍然可以平行執行。",
       ],
-      explanation: "負責車用電子與電源管理 IC 所需之 0.4um BCD 高壓製程整合，制定自晶圓量測到良率監控的完整標準，確保新產品順利試產並穩定達成車用級良率門檻。",
-      role: "製程整合工程師 / Process Integration Engineer",
-      techStack: ["0.4um BCD", "WAT Testing", "NTO Process", "Inline Measurement", "Yield Excursion"]
-    }
-  ],
+    },
+  },
   ui: {
     nav: {
       info: "資訊",
       about: "關於",
       skills: "技能",
       experience: "工作經歷",
+      projects: "專案",
       education: "學歷",
     },
     sections: {
       about: { heading: "關於我" },
       skills: { heading: "技能" },
       experience: { heading: "工作經歷" },
+      projects: { heading: "專案" },
       education: { heading: "學歷" },
+    },
+    projectsPage: {
+      viewCase: "查看專案說明",
+      backToProjects: "返回專案列表",
+      roleLabel: "角色",
+      techLabel: "使用技術",
+      configTitle: "規則設定範例",
+      configNote: "示意用的設定概念，姓名、Email 與電話皆為假資料。",
+      lockWorkerA: "執行者 A：取得 lock，執行規則",
+      lockWorkerB: "執行者 B：未取得 lock，不執行",
     },
     hero: {
       welcomeComment: "# Welcome to my portfolio",

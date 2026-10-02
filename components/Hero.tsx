@@ -4,15 +4,21 @@ import { ArrowRight } from 'lucide-react';
 import { SOCIAL_LINKS } from '../constants';
 import { useLanguage } from '../LanguageContext';
 
+// Latin glyphs look good outlined; CJK glyphs are built from overlapping
+// contours, so a stroke would draw their internal overlaps. Fill them instead.
 const outlineStyle: React.CSSProperties = {
   WebkitTextStroke: '1.5px var(--vscode-text)',
   color: 'transparent',
+};
+const solidStyle: React.CSSProperties = {
+  color: 'var(--vscode-text)',
 };
 
 const Hero: React.FC = () => {
   const { t, language } = useLanguage();
   const { personalInfo, ui } = t;
   const { hero } = ui;
+  const headlineStyle = language === 'zh' ? solidStyle : outlineStyle;
 
   return (
     <section className="relative min-h-screen overflow-hidden flex flex-col px-5 sm:px-8 pt-20 md:pt-8 pb-6">
@@ -29,15 +35,15 @@ const Hero: React.FC = () => {
 
       {/* Headline */}
       <div className="relative z-10 flex-1 flex flex-col justify-center py-10 animate-fade-in-up">
-        <h1 className={`${language === 'zh' ? 'font-display-zh' : 'font-display'} font-bold leading-[1.05] tracking-tight text-[2.6rem] sm:text-6xl lg:text-7xl xl:text-8xl`}>
-          <span className="block" style={outlineStyle}>{hero.headlineRole}</span>
+        <h1 className={`${language === 'zh' ? 'font-display-zh' : 'font-display'} font-bold leading-[1.2] tracking-tight text-[2.6rem] sm:text-6xl lg:text-7xl xl:text-8xl`}>
+          <span className="block" style={headlineStyle}>{hero.headlineRole}</span>
           <span
-            className="block mt-1 sm:mt-2 italic"
+            className="block mt-3 sm:mt-5 italic"
             style={{ WebkitTextStroke: '0', color: 'var(--vscode-accent)' }}
           >
             {hero.headlineName}
           </span>
-          <span className="block mt-1 sm:mt-2 text-[0.6em] leading-[1.2]" style={outlineStyle}>
+          <span className="block mt-3 sm:mt-5 text-[0.6em] leading-[1.35]" style={headlineStyle}>
             {hero.headlineTail}
           </span>
         </h1>

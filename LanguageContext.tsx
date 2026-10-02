@@ -41,7 +41,7 @@ interface LanguageContextValue {
 const LanguageContext = createContext<LanguageContextValue | undefined>(undefined);
 
 export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [language, setLanguageState] = useState<Locale>(resolveInitialLocale);
+  const [language, setLanguageState] = useState<Locale>(DEFAULT_LOCALE);
 
   const setLanguage = useCallback((lang: Locale) => {
     setLanguageState(lang);
@@ -49,11 +49,13 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     writeLocaleToUrl(lang);
   }, []);
 
-  // Keep the URL in sync on first load even if the resolved locale came
-  // from localStorage/navigator rather than an explicit `?lang=` param.
+  // Start from DEFAULT_LOCALE so the first client render matches the
+  // prerendered HTML, then switch to the visitor's resolved locale
+  // (?lang=, localStorage, navigator) and keep the URL in sync.
   useEffect(() => {
-    writeLocaleToUrl(language);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+    const resolved = resolveInitialLocale();
+    setLanguageState(resolved);
+    writeLocaleToUrl(resolved);
   }, []);
 
   useEffect(() => {
