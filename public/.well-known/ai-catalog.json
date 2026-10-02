@@ -6,11 +6,17 @@
   },
   "entries": [
     {
-      "identifier": "urn:ai:tingwtlee.dev:knowledge:llms-txt",
+      "identifier": "urn:air:tingwtlee.dev:knowledge:llms-txt",
       "displayName": "Wan-Ting Lee Portfolio Overview",
       "type": "text/plain",
       "url": "https://tingwtlee.dev/llms.txt",
-      "description": "Plain-text overview of Wan-Ting Lee's portfolio: a Full-Stack Developer with a semiconductor industry background, with links to the About, Skills, Experience and Education pages."
+      "description": "Plain-text overview of Wan-Ting Lee's portfolio: a Full-Stack Developer with a semiconductor industry background, with links to the About, Skills, Experience and Education pages.",
+      "representativeQueries": [
+        "Who is Wan-Ting Lee?",
+        "What is Wan-Ting Lee's work experience as a full-stack developer?",
+        "What skills does Wan-Ting Lee have?",
+        "How did Wan-Ting Lee transition from the semiconductor industry to software development?"
+      ]
     }
   ]
 }

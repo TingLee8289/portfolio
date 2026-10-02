@@ -8,7 +8,6 @@
     <meta name="description" content="Portfolio of 李宛庭 (Wan-Ting Lee), Full-Stack Developer with semiconductor industry background (Taiwan Mobile, TSMC, VIS)." />
 
     <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-SLRLJVYYTW"></script>
     <script>
       window.dataLayer = window.dataLayer || [];
       function gtag(){dataLayer.push(arguments);}
@@ -16,12 +15,25 @@
 
       // page_view is sent by the router on every route change (including the first)
       gtag('config', 'G-SLRLJVYYTW', { send_page_view: false });
+
+      // Calls above are queued in dataLayer; load gtag.js only after the page is idle so it doesn't compete with first paint
+      function loadGtag() {
+        var s = document.createElement('script');
+        s.async = true;
+        s.src = 'https://www.googletagmanager.com/gtag/js?id=G-SLRLJVYYTW';
+        document.head.appendChild(s);
+      }
+      window.addEventListener('load', function () {
+        if ('requestIdleCallback' in window) requestIdleCallback(loadGtag, { timeout: 3000 });
+        else setTimeout(loadGtag, 2000);
+      });
     </script>
 
-    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Poppins:ital,wght@0,600;0,700;1,600;1,700&family=Noto+Sans+TC:wght@500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Poppins:ital,wght@0,600;0,700;1,600;1,700&display=swap" rel="stylesheet">
+    <!-- Noto Sans TC subset to the zh hero headline only; update text= if that copy changes -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@500;700&display=swap&text=%E5%85%A8%E7%AB%AF%E9%96%8B%E7%99%BC%E5%B7%A5%E7%A8%8B%E5%B8%AB%E6%9D%8E%E5%AE%9B%E5%BA%AD%E7%94%A8%E8%B3%87%E6%96%99%E7%9C%8B%E5%95%8F%E9%A1%8C%EF%BC%8C%E7%94%A8%E7%A8%8B%E5%BC%8F%E8%A7%A3%E5%95%8F%E9%A1%8C%E3%80%82" rel="stylesheet">
     <style>
       :root {
         --vscode-bg: #121212;
@@ -75,58 +87,6 @@
         background: rgba(60, 63, 65, 0.6);
       }
     </style>
-    <script>
-      tailwind.config = {
-        theme: {
-          extend: {
-            fontFamily: {
-              sans: ['Inter', 'sans-serif'],
-              mono: ['JetBrains Mono', 'monospace'],
-              display: ['Poppins', 'Noto Sans TC', 'sans-serif'],
-              'display-zh': ['Noto Sans TC', 'sans-serif'],
-            },
-            colors: {
-              vscode: {
-                bg: 'var(--vscode-bg)',
-                sidebar: 'var(--vscode-sidebar)',
-                activity: 'var(--vscode-activity)',
-                accent: 'var(--vscode-accent)',
-                text: 'var(--vscode-text)',
-                comment: 'var(--vscode-comment)',
-                string: 'var(--vscode-string)',
-                keyword: 'var(--vscode-keyword)',
-                class: 'var(--vscode-class)',
-                function: 'var(--vscode-function)'
-              },
-              primary: {
-                400: '#60a5fa', 
-                500: '#3b82f6', 
-                600: '#2563eb', 
-              },
-              secondary: {
-                400: '#a78bfa', 
-                500: '#8b5cf6', 
-                600: '#7c3aed', 
-              },
-            },
-            animation: {
-              'blink': 'blink 1s step-end infinite',
-              'fade-in-up': 'fadeInUp 0.5s ease-out forwards',
-            },
-            keyframes: {
-              blink: {
-                '0%, 100%': { opacity: '1' },
-                '50%': { opacity: '0' },
-              },
-              fadeInUp: {
-                '0%': { opacity: '0', transform: 'translateY(10px)' },
-                '100%': { opacity: '1', transform: 'translateY(0)' },
-              }
-            }
-          }
-        }
-      }
-    </script>
   <script type="importmap">
 {
   "imports": {
@@ -137,7 +97,6 @@
   }
 }
 </script>
-<link rel="stylesheet" href="/index.css">
 </head>
   <body class="bg-vscode-bg text-vscode-text font-sans antialiased selection:bg-vscode-accent selection:text-white transition-colors duration-300">
     <div id="root"></div>

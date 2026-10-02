@@ -61,7 +61,7 @@ const Hero: React.FC = () => {
       </div>
 
       {/* Bottom row */}
-      <div className="relative z-10 mt-8 flex items-center justify-between font-mono text-[11px] sm:text-xs tracking-wide uppercase text-gray-500">
+      <div className="relative z-10 mt-8 flex items-center justify-between font-mono text-[11px] sm:text-xs tracking-wide uppercase text-gray-400">
         <span>© {new Date().getFullYear()} {personalInfo.name} {ui.footer.rights}</span>
         <div className="flex items-center gap-3">
           {SOCIAL_LINKS.map((link, i) => {
