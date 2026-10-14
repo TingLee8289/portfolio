@@ -5,8 +5,8 @@ import { PortfolioContent } from './types';
 export const zhContent: PortfolioContent = {
   personalInfo: {
     ...PERSONAL_INFO_BASE,
-    title: "Full-Stack Developer | Semiconductor Industry Background",
-    subTitle: "全端開發工程師 ｜ 半導體先進製程背景",
+    title: "Full-Stack Developer | Software Engineering + Semiconductor Process Integration",
+    subTitle: "全端開發工程師 ｜ 軟體工程 + 半導體製程整合",
     tagline: "Bridging Semiconductor Precision with Modern Full-Stack Engineering",
     about: [
       "　　擁有半導體先進製程整合與現代全端軟體架構的雙重專業背景。於台積電及世界先進擔任製程整合工程師期間，深刻體會到自動化系統為團隊節省大量人力與時間成本的價值，進而跨領域轉職投入軟體開發。",
@@ -42,7 +42,8 @@ export const zhContent: PortfolioContent = {
       summary: "負責網站系統需求分析、架構設計、程式開發、測試及維運工作。",
       description: [
         { projectId: "dcbp", projectLabel: "大哥付隨帳收", text: "OTT 申辦、停車代收、點燈祈福整合平台，串接多套帳務系統並提供外部廠商 API。" },
-        { text: "建置 OpenSearch API Latency Dashboards，並追蹤各節點 API、DB 呼叫耗時，加速異常排查效率。" },
+        { text: "升級 Spring Boot 2.x (JDK8) 至 3.x (JDK17) 以修補弱點，並以 AI 補齊單元測試與 E2E 自動化測試。", detailPath: "/projects/upgrade-jdk17" },
+        { text: "建置 OpenSearch API Latency Dashboards，並追蹤各節點 API、DB 呼叫耗時，加速異常排查效率。", detailPath: "/projects/latency-dashboard" },
         { text: "導入 SDD (Spec-Driven Development) 開發流程及前後端自動化測試 (Playwright, Selenium, JUnit)。" },
         { text: "導入 Design Patterns 重構專案 API，加快後續服務接入速度並降低邏輯錯誤。" },
         { text: "建立排程監控與告警系統，於 DB、Log 符合設定條件時自動發送 email 或簡訊通知。", detailPath: "/projects/monitoring" },
@@ -80,7 +81,7 @@ export const zhContent: PortfolioContent = {
     title: "排程監控與告警系統",
     subtitle: "針對 DB 與 Log 的條件監控，自動發送 Email 與簡訊通知",
     summary: "針對 DB 與 Log 兩種資料源，依可設定的監控規則排程檢查，條件成立時自動通知指定人員。每條規則的資料源、時間範圍、門檻與告警人員都能獨立調整，同一位人員在同一個通知管道上設有抑制時間，避免重複打擾，並以分散式 lock 避免同一規則被重複執行。",
-    role: "Senior Engineer（需求分析、架構設計、開發、測試）",
+    role: "需求分析、架構設計、開發、測試",
     tech: ["Java", "Spring Boot", "PostgreSQL", "OpenSearch", "Distributed Lock", "Scheduler", "Email", "SMS"],
     problem: {
       heading: "要解決的問題",
@@ -142,6 +143,151 @@ export const zhContent: PortfolioContent = {
       ],
     },
   },
+  upgradeCase: {
+    imageAlt: "Java 8 與 Spring Boot 2 升級為 Java 17 與 Spring Boot 3 的插畫",
+    title: "Java 8 到 17 的升級之旅",
+    subtitle: "大哥付隨帳收從 JDK 8 + Spring Boot 2 升級至 JDK 17 + Spring Boot 3，以 AI 輔助補齊測試作為安全網",
+    summary: "為修補 Checkmarx、WhiteSource 掃描出的弱點，將大哥付隨帳收同時從 JDK 8 + Spring Boot 2 升級至 JDK 17 + Spring Boot 3。升級前先請 AI 補齊單元測試，並列出所有 API、為每支 API 撰寫測試案例；可重複呼叫或可 rollback 的 API 由 AI 產生自動化測試腳本，無法 rollback 的 API 則以手動測試補足，上線後 Regression Test 全數通過。",
+    role: "需求分析、架構設計、開發、測試",
+    tech: ["JDK 17", "Spring Boot 3", "Spring Security", "Jakarta EE", "Docker", "Checkmarx", "WhiteSource", "JUnit", "AI 輔助測試"],
+    problem: {
+      heading: "要解決的問題",
+      body: [
+        "大哥付隨帳收是串接多套帳務系統、並提供 API 給外部廠商的平台。Checkmarx 與 WhiteSource 的掃描持續列出舊版相依套件的弱點，要根本修補，需要升級到仍受支援的版本。",
+        "這是一次跨大版本的升級，影響範圍包含 JDK、Spring Boot 與 Spring Security。因為平台會被外部廠商呼叫，升級後行為不能改變，所以先把測試補齊，再進行升級。",
+      ],
+    },
+    changes: {
+      heading: "主要的調整項目",
+      intro: "這次升級需要處理的改動主要有三類：",
+      items: [
+        { name: "javax.* → jakarta.*", desc: "Spring Boot 3 改用 Jakarta EE，程式中的 javax 套件需要全面改為 jakarta。" },
+        { name: "Spring Security 設定", desc: "Spring Security 6 移除 WebSecurityConfigurerAdapter，改以 SecurityFilterChain Bean 設定，授權的寫法也一併調整。" },
+        { name: "Dockerfile", desc: "基底映像改為 JDK 17，並調整對應的建置與啟動設定。" },
+      ],
+    },
+    sample: {
+      heading: "改寫範例",
+      intro: "以 Spring Security 設定為例，舊寫法繼承 WebSecurityConfigurerAdapter，新寫法改為註冊 SecurityFilterChain，套件也從 javax 換成 jakarta。",
+      beforeLabel: "Spring Boot 2",
+      afterLabel: "Spring Boot 3",
+      note: "示意用的寫法，路徑與類別名稱皆為假資料。",
+    },
+    testing: {
+      heading: "測試策略",
+      intro: "升級的風險在於行為被悄悄改變。因此先建立測試作為安全網，再同時升級 JDK 與 Spring Boot，並善用 AI 縮短補測試的時間。",
+      steps: [
+        { title: "補齊單元測試", desc: "先請 AI 為既有程式補齊單元測試，讓升級後能快速發現邏輯改變。" },
+        { title: "列出所有 API", desc: "請 AI 列出系統所有 API，並為每支 API 撰寫測試案例。" },
+        { title: "自動化測試腳本", desc: "針對可重複呼叫、或可以 rollback 的 API，請 AI 產生自動化測試腳本。" },
+        { title: "手動測試", desc: "無法 rollback 的 API 不適合反覆自動化執行，改以手動測試補足。" },
+        { title: "同時升級", desc: "JDK 與 Spring Boot 同時升級，完成上述三類調整後，以測試驗證行為一致。" },
+        { title: "上線後驗證", desc: "上線後執行 Regression Test，全數通過。" },
+      ],
+    },
+    outcome: {
+      heading: "成果",
+      points: [
+        "完成 JDK 17 + Spring Boot 3 升級並上線，上線後 Regression Test 全數通過。",
+        "升級至仍受支援的版本，作為修補 Checkmarx、WhiteSource 弱點的主要手段。",
+        "留下單元測試與 API 自動化測試腳本，可供日後升級與維護重複使用。",
+      ],
+    },
+  },
+  latencyCase: {
+    title: "API Latency 儀表板",
+    subtitle: "以 Trace ID 串起 API、外部呼叫與 DB 耗時，用 OpenSearch Dashboards 找出慢 API 與重複呼叫",
+    summary: "透過 Filebeat 收集帶有同一個 Trace ID 的 Log，送進 OpenSearch，並以 OpenSearch Dashboards 的趨勢圖呈現各 API、外部 API 與 DB 的耗時與呼叫次數。團隊可以直接看到哪些 API 偏慢、哪些 API 呼叫最頻繁，以及哪些請求重複呼叫同一支外部 API 或出現 N+1 DB query，不必再逐筆翻 Log 排查。",
+    role: "需求分析、架構設計、開發、測試",
+    tech: ["Java", "Spring Boot", "SLF4J MDC", "Filebeat", "OpenSearch", "OpenSearch Dashboards"],
+    problem: {
+      heading: "要解決的問題",
+      body: [
+        "系統變慢或出現異常時，只能憑印象猜是哪支 API，再逐筆翻 Log 確認，排查很花時間。",
+        "具體來說有三件事看不到：哪些 API 回應偏慢、哪些 API 呼叫次數最多，以及哪些 API 在一次請求裡重複呼叫同一支外部 API，或出現 N+1 DB query。",
+        "這個儀表板把每次請求經過的各個節點（API、外部呼叫、DB）的耗時都記錄下來，並以同一個 Trace ID 串起來，讓問題從「猜」變成「看得到」。",
+      ],
+    },
+    flow: {
+      heading: "運作流程",
+      steps: [
+        { title: "請求進入", desc: "每個請求在入口產生 Trace ID，放進 MDC，讓同一個請求的所有 Log 都帶有它。" },
+        { title: "記錄各節點耗時", desc: "API 本身、外部 API 呼叫、DB 呼叫各自記錄耗時與目標，輸出成結構化 Log。" },
+        { title: "Filebeat 收集", desc: "Filebeat 讀取 Log 檔案，送進 OpenSearch。" },
+        { title: "建立索引與欄位", desc: "Trace ID、類型、API 名稱、呼叫目標與耗時都成為可查詢、可聚合的欄位。" },
+        { title: "儀表板呈現", desc: "OpenSearch Dashboards 以趨勢圖與統計圖呈現耗時、呼叫次數與重複呼叫。" },
+        { title: "往下追蹤", desc: "從異常的 API 用 Trace ID 查出該次請求的每一個外部呼叫與 SQL。" },
+      ],
+    },
+    panels: {
+      heading: "三個要回答的問題",
+      intro: "每個問題對應一組圖表，用趨勢圖觀察變化，也方便比對上線前後。",
+      items: [
+        { name: "哪些 API 回應偏慢", desc: "依 API 統計耗時（建議看 p95 而不是平均值），以趨勢圖呈現。耗時突然上升，可以對照上線時間找原因。" },
+        { name: "哪些 API 呼叫最多", desc: "依時間範圍統計各 API 的呼叫次數，找出流量最大的 API，作為優化優先順序的參考。" },
+        { name: "哪些 API 重複呼叫外部 API 或有 N+1", desc: "以 Trace ID 為單位，統計同一個外部 API 或同一種 SQL 在一次請求內出現的次數，次數異常多的就是需要檢查的對象。" },
+      ],
+    },
+    sample: {
+      heading: "Log 範例",
+      intro: "同一個 Trace ID 下，一次請求會留下 API、外部呼叫與多筆 DB 呼叫的紀錄。下面的例子中，同一種 SQL 重複出現，就是典型的 N+1。",
+      note: "示意用的 Log 格式，API 名稱、SQL 名稱與數值皆為假資料。",
+    },
+    outcome: {
+      heading: "成果",
+      points: [
+        "慢 API 與高流量 API 可以直接在儀表板看到排名與趨勢，不再靠印象判斷。",
+        "重複呼叫外部 API 與 N+1 DB query 可以被統計出來，不必逐筆翻 Log。",
+        "以 Trace ID 從單一請求往下追到每個外部呼叫與 SQL，加速異常排查。",
+      ],
+    },
+  },
+  socialNotionCase: {
+    imageAlt: "可愛機器人把社群貼文收藏進書籤收納盒的插畫",
+    title: "社群貼文一鍵收藏到 Notion",
+    subtitle: "以 LINE 轉發連結，透過 Google Apps Script 自動整理並存入 Notion 資料庫",
+    summary: "在 Facebook、Instagram、Threads 等不同社群平台看到想留存的貼文時，只要分享到 LINE 機器人，Google Apps Script 就會辨識來源平台、擷取貼文資訊，並寫入 Notion 資料庫統一管理，之後可用標題、平台、標籤與收藏日期集中搜尋。",
+    role: "個人專案（需求分析、系統設計、開發）",
+    tech: ["Google Apps Script", "LINE Messaging API", "Notion API", "Webhook", "JavaScript"],
+    problem: {
+      heading: "要解決的問題",
+      body: [
+        "好內容散落在各個社群平台的「收藏」、「儲存」功能裡，每個平台各自一套，想回頭找時要逐一翻找，往往找不到。",
+        "這個專案把「收藏」收斂到同一個入口：在任何 App 把貼文分享到 LINE，就會自動存進 Notion，用同一套資料庫搜尋與整理。",
+      ],
+    },
+    flow: {
+      heading: "運作流程",
+      steps: [
+        { title: "分享貼文", desc: "在社群 App 把貼文連結分享給 LINE 機器人。" },
+        { title: "Webhook 接收", desc: "LINE 將訊息事件送到 Google Apps Script 部署的 Web App（doPost）。" },
+        { title: "辨識平台", desc: "從網址判斷來源平台，並過濾非連結的訊息。" },
+        { title: "擷取資訊", desc: "取得頁面標題、摘要與縮圖等公開資訊。" },
+        { title: "寫入 Notion", desc: "透過 Notion API 在資料庫建立一筆紀錄，並帶入平台、連結與收藏日期。" },
+        { title: "回覆確認", desc: "透過 LINE 回覆是否收藏成功，失敗時提示原因。" },
+      ],
+    },
+    features: {
+      heading: "資料庫欄位設計",
+      intro: "每筆貼文在 Notion 中都是一筆結構化紀錄，讓不同平台的內容能用同一套條件搜尋。",
+      items: [
+        { name: "標題", desc: "貼文或頁面標題" },
+        { name: "來源平台", desc: "Facebook、Instagram、Threads 等" },
+        { name: "原始連結", desc: "可直接點回原貼文" },
+        { name: "摘要", desc: "貼文內容節錄，方便全文搜尋" },
+        { name: "標籤", desc: "自訂分類，方便篩選" },
+        { name: "收藏日期", desc: "依時間排序與回顧" },
+      ],
+    },
+    outcome: {
+      heading: "成果",
+      points: [
+        "多個平台的收藏集中在同一個 Notion 資料庫，搜尋入口只剩一個。",
+        "收藏動作只需「分享到 LINE」一步，不必離開原本使用的 App。",
+        "使用 Google Apps Script 部署，不需自行維護伺服器。",
+      ],
+    },
+  },
   ui: {
     nav: {
       info: "資訊",
@@ -164,8 +310,7 @@ export const zhContent: PortfolioContent = {
       roleLabel: "角色",
       techLabel: "使用技術",
       configTitle: "規則設定範例",
-      configNote: "示意用的設定概念，姓名、Email 與電話皆為假資料。",
-      lockWorkerA: "執行者 A：取得 lock，執行規則",
+      configNote: "示意用的設定概念，姓名、Email 與電話皆為假資料。",      lockWorkerA: "執行者 A：取得 lock，執行規則",
       lockWorkerB: "執行者 B：未取得 lock，不執行",
     },
     hero: {
@@ -175,6 +320,12 @@ export const zhContent: PortfolioContent = {
       headlineTail: "用資料看問題，用程式解問題。",
       cta: "查看工作經歷",
       location: "Taoyuan, Taiwan",
+    },
+    joke: {
+      fileName: "joke.tsx",
+      comment: "# 從資料庫隨機抽一則笑話",
+      loading: "笑話載入中...",
+      another: "再來一則",
     },
     footer: {
       rights: "All Rights Reserved",

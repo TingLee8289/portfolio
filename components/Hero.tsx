@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import { SOCIAL_LINKS } from '../constants';
 import { useLanguage } from '../LanguageContext';
+// TODO: re-enable the random joke window once it is ready to launch.
+// import JokeWindow from './JokeWindow';
 
 // Latin glyphs look good outlined; CJK glyphs are built from overlapping
 // contours, so a stroke would draw their internal overlaps. Fill them instead.
@@ -36,12 +38,9 @@ const Hero: React.FC = () => {
       {/* Headline */}
       <div className="relative z-10 flex-1 flex flex-col justify-center py-10 animate-fade-in-up">
         <h1 className={`${language === 'zh' ? 'font-display-zh' : 'font-display'} font-bold leading-[1.2] tracking-tight text-[2.6rem] sm:text-6xl lg:text-7xl xl:text-8xl`}>
-          <span className="block" style={headlineStyle}>{hero.headlineRole}</span>
-          <span
-            className="block mt-3 sm:mt-5 italic"
-            style={{ WebkitTextStroke: '0', color: 'var(--vscode-accent)' }}
-          >
-            {hero.headlineName}
+          <span className="block" style={headlineStyle}>{hero.headlineName}</span>
+          <span className="block mt-3 sm:mt-5 text-[0.6em] leading-[1.35] whitespace-pre-line" style={solidStyle}>
+            {hero.headlineRole}
           </span>
           <span className="block mt-3 sm:mt-5 text-[0.6em] leading-[1.35]" style={headlineStyle}>
             {hero.headlineTail}
@@ -59,6 +58,9 @@ const Hero: React.FC = () => {
           <ArrowRight className="w-6 h-6 sm:w-8 sm:h-8 transition-transform group-hover:translate-x-1" />
         </Link>
       </div>
+
+      {/* Random joke window (pending) */}
+      {/* <JokeWindow /> */}
 
       {/* Bottom row */}
       <div className="relative z-10 mt-8 flex items-center justify-between font-mono text-[11px] sm:text-xs tracking-wide uppercase text-gray-400">

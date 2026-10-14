@@ -10,6 +10,9 @@
 - [Experience](https://tingwtlee.dev/experience): Work history at Taiwan Mobile, TSMC and VIS, with project highlights.
 - [Projects](https://tingwtlee.dev/projects): Project showcase.
 - [Scheduled Monitoring & Alerting System](https://tingwtlee.dev/projects/monitoring): Case study of a rule-based system that monitors a database and logs and sends email/SMS alerts, with a suppression window to avoid repeat notifications and a distributed lock to avoid duplicate runs.
+- [The Journey from Java 8 to 17](https://tingwtlee.dev/projects/upgrade-jdk17): Case study of upgrading a billing platform from JDK 8 + Spring Boot 2 to JDK 17 + Spring Boot 3 to fix Checkmarx and WhiteSource findings, using AI-assisted unit tests and API automation tests as a safety net.
+- [API Latency Dashboards](https://tingwtlee.dev/projects/latency-dashboard): Case study of OpenSearch Dashboards built on Filebeat logs sharing one trace ID, used to find slow APIs, the most-called APIs, repeated external API calls and N+1 DB queries.
+- [Social Posts to Notion via LINE](https://tingwtlee.dev/projects/social-notion): Personal project that uses Google Apps Script and a LINE bot to save social media posts from multiple platforms into one searchable Notion database.
 - [Education](https://tingwtlee.dev/education): Linköping University (M.S.) and National Tsing Hua University (B.S.).
 
 ## Optional

@@ -70,6 +70,7 @@ export const SKILL_GROUPS: SkillGroup[] = [
           { name: "OpenSearch", color: "text-teal-400", icon: Search },
           { name: "Redis", color: "text-red-400", icon: Layers },
           { name: "MySQL", color: "text-sky-400", icon: Database },
+          { name: "Oracle", color: "text-red-500", icon: Database },
         ]
       },
       {
@@ -110,6 +111,7 @@ export const SKILL_GROUPS: SkillGroup[] = [
           { name: "SPC (Statistical Process Control)", color: "text-yellow-400", icon: BarChart3 },
           { name: "WAT (Wafer Acceptance Test)", color: "text-blue-400", icon: Cpu },
           { name: "Yield", color: "text-emerald-400", icon: Activity },
+          { name: "Process Integration", color: "text-purple-400", icon: Layers },
         ]
       }
     ]

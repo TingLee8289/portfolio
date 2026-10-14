@@ -12,6 +12,9 @@ import Experience from './components/Experience';
 import Education from './components/Education';
 import Projects from './components/Projects';
 import ProjectMonitoring from './components/ProjectMonitoring';
+import ProjectSocialNotion from './components/ProjectSocialNotion';
+import ProjectLatency from './components/ProjectLatency';
+import ProjectUpgrade from './components/ProjectUpgrade';
 
 declare global {
   interface Window {
@@ -62,6 +65,9 @@ const App: React.FC = () => {
               <Route path="/experience" element={<Experience />} />
               <Route path="/projects" element={<Projects />} />
               <Route path="/projects/monitoring" element={<ProjectMonitoring />} />
+              <Route path="/projects/upgrade-jdk17" element={<ProjectUpgrade />} />
+              <Route path="/projects/latency-dashboard" element={<ProjectLatency />} />
+              <Route path="/projects/social-notion" element={<ProjectSocialNotion />} />
               <Route path="/education" element={<Education />} />
               <Route path="*" element={<Hero />} />
             </Routes>

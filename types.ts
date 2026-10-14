@@ -93,8 +93,7 @@ export interface UIStrings {
     roleLabel: string;
     techLabel: string;
     configTitle: string;
-    configNote: string;
-    lockWorkerA: string;
+    configNote: string;    lockWorkerA: string;
     lockWorkerB: string;
   };
   hero: {
@@ -104,6 +103,12 @@ export interface UIStrings {
     headlineTail: string;
     cta: string;
     location: string;
+  };
+  joke: {
+    fileName: string;
+    comment: string;
+    loading: string;
+    another: string;
   };
   footer: {
     rights: string;
@@ -133,11 +138,54 @@ export interface CaseStudy {
   locking: { heading: string; intro: string; points: string[] };
 }
 
+export interface SocialCase {
+  imageAlt: string;
+  title: string;
+  subtitle: string;
+  summary: string;
+  role: string;
+  tech: string[];
+  problem: { heading: string; body: string[] };
+  flow: { heading: string; steps: { title: string; desc: string }[] };
+  features: { heading: string; intro: string; items: { name: string; desc: string }[] };
+  outcome: { heading: string; points: string[] };
+}
+
+export interface LatencyCase {
+  title: string;
+  subtitle: string;
+  summary: string;
+  role: string;
+  tech: string[];
+  problem: { heading: string; body: string[] };
+  flow: { heading: string; steps: { title: string; desc: string }[] };
+  panels: { heading: string; intro: string; items: { name: string; desc: string }[] };
+  sample: { heading: string; intro: string; note: string };
+  outcome: { heading: string; points: string[] };
+}
+
+export interface UpgradeCase {
+  imageAlt: string;
+  title: string;
+  subtitle: string;
+  summary: string;
+  role: string;
+  tech: string[];
+  problem: { heading: string; body: string[] };
+  changes: { heading: string; intro: string; items: { name: string; desc: string }[] };
+  sample: { heading: string; intro: string; beforeLabel: string; afterLabel: string; note: string };
+  testing: { heading: string; intro: string; steps: { title: string; desc: string }[] };
+  outcome: { heading: string; points: string[] };
+}
+
 export interface PortfolioContent {
   personalInfo: PersonalInfo;
   stats: StatItem[];
   education: EducationItem[];
   experience: ExperienceItem[];
   monitoringCase: CaseStudy;
+  socialNotionCase: SocialCase;
+  latencyCase: LatencyCase;
+  upgradeCase: UpgradeCase;
   ui: UIStrings;
 }
