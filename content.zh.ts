@@ -303,6 +303,18 @@ export const zhContent: PortfolioContent = {
         "融合 IE 的產線指標、PC 的排程派工、Kafka 事件流、RabbitMQ 指令佇列等主題，打造一個能實際跑起來、看得到過程的披薩工廠。",
       ],
     },
+    features: {
+      heading: "主要功能",
+      intro: "所有操作都在同一個儀表板上完成，調整後可以馬上看到產線與 KPI 的變化。",
+      items: [
+        { name: "下單", desc: "在儀表板手動下單並設定優先度，也可以讓產生器依到達率自動下單" },
+        { name: "調整機台 Recipe", desc: "調整各站對不同品項的 recipe，觀察瓶頸與 KPI 隨之改變" },
+        { name: "即時計算 ETA", desc: "依瓶頸產能與排隊中的 WIP 估算每張訂單的完成時間與交期" },
+        { name: "KPI 趨勢圖", desc: "throughput、WIP、cycle time 隨時間變化，方便比較調整前後的差異" },
+        { name: "Lot Handling", desc: "追蹤每個 lot 所在的站點與狀態，處理機台故障造成的重工" },
+        { name: "機台 Performance", desc: "各站使用率與處理狀況一目了然，並標示目前的瓶頸站" },
+      ],
+    },
     messaging: {
       heading: "訊息分工：指令 vs 事實",
       intro: "整個系統只有一條規則：RabbitMQ 傳指令，Kafka 傳事實。指令有明確的接收者，做完要回報；事實只描述已發生的事，誰都可以讀，也可以重播。",

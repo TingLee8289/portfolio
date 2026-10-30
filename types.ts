@@ -162,6 +162,7 @@ export interface PizzaCase {
   tech: string[];
   demo: { caption: string };
   problem: { heading: string; body: string[] };
+  features: { heading: string; intro: string; items: { name: string; desc: string }[] };
   messaging: {
     heading: string;
     intro: string;

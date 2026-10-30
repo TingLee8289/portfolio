@@ -7,6 +7,9 @@
     "directory": "./dist",
     "binding": "ASSETS",
     "not_found_handling": "single-page-application",
+    // Serve dist/about/index.html at /about (and 307 /about/ -> /about) so the
+    // slash-less URLs in sitemap.xml return 200 instead of redirecting.
+    "html_handling": "drop-trailing-slash",
     "run_worker_first": ["/api/*"]
   }
   // TODO: joke feature is pending. Create the D1 database, put its ID below and

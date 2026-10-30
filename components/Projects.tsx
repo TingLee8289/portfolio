@@ -4,7 +4,7 @@ import { ArrowRight } from 'lucide-react';
 import { useLanguage } from '../LanguageContext';
 
 const Projects: React.FC = () => {
-  const { t } = useLanguage();
+  const { t, lp } = useLanguage();
   const { ui } = t;
   const labels = ui.projectsPage;
 
@@ -54,7 +54,7 @@ const Projects: React.FC = () => {
           {cases.map(({ to, data, image, imageAlt, category }) => (
             <Link
               key={to}
-              to={to}
+              to={lp(to)}
               className={`group glass-panel rounded-xl p-6 sm:p-8 border-2 border-white/25 hover:border-vscode-accent transition-colors ${
                 isTwoColumn ? 'flex flex-col lg:grid lg:grid-rows-subgrid lg:row-span-6 lg:mb-8' : 'flex flex-col'
               }`}

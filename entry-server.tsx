@@ -4,12 +4,12 @@ import { StaticRouter } from 'react-router-dom/server';
 import App from './App';
 import { LanguageProvider } from './LanguageContext';
 import { CONTENT } from './content';
-import { getPageTitle, ROUTES } from './routeMeta';
+import { getLocaleFromPath, getPageTitle, ROUTES } from './routeMeta';
 
 export { ROUTES };
+export { localizePath } from './routeMeta';
 
-// Prerendered pages use the default locale (zh); the client switches to the
-// visitor's preferred locale after hydration.
+// The locale comes from the URL: /about renders Chinese, /en/about English.
 export function render(url: string) {
   const html = renderToString(
     <React.StrictMode>
@@ -20,6 +20,7 @@ export function render(url: string) {
       </StaticRouter>
     </React.StrictMode>
   );
-  const t = CONTENT.zh;
-  return { html, title: getPageTitle(url, t), description: t.ui.seo.description };
+  const locale = getLocaleFromPath(url);
+  const t = CONTENT[locale];
+  return { html, locale, title: getPageTitle(url, t), description: t.ui.seo.description };
 }

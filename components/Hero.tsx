@@ -17,7 +17,7 @@ const solidStyle: React.CSSProperties = {
 };
 
 const Hero: React.FC = () => {
-  const { t, language } = useLanguage();
+  const { t, language, lp } = useLanguage();
   const { personalInfo, ui } = t;
   const { hero } = ui;
   const headlineStyle = language === 'zh' ? solidStyle : outlineStyle;
@@ -51,7 +51,7 @@ const Hero: React.FC = () => {
       {/* CTA */}
       <div className="relative z-10 flex justify-end">
         <Link
-          to="/projects"
+          to={lp('/projects')}
           className="group inline-flex items-center gap-3 border-b-2 border-white pb-1 text-2xl sm:text-4xl font-bold italic text-white hover:text-vscode-accent hover:border-vscode-accent transition-colors"
         >
           {hero.cta}

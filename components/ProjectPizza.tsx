@@ -23,7 +23,7 @@ const ItemGrid: React.FC<{ items: { name: string; desc: string }[] }> = ({ items
 );
 
 const ProjectPizza: React.FC = () => {
-  const { t } = useLanguage();
+  const { t, lp } = useLanguage();
   const c = t.pizzaCase;
   const labels = t.ui.projectsPage;
 
@@ -31,7 +31,7 @@ const ProjectPizza: React.FC = () => {
     <article className="py-24">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <Link
-          to="/projects"
+          to={lp('/projects')}
           className="inline-flex items-center gap-2 text-sm font-mono text-gray-400 hover:text-white transition-colors mb-10"
         >
           <ArrowLeft className="w-4 h-4" />
@@ -85,9 +85,16 @@ const ProjectPizza: React.FC = () => {
           </div>
         </section>
 
-        {/* 02 Commands vs facts */}
+        {/* 02 Key features */}
         <section className="mb-16">
-          <SectionTitle index="02.">{c.messaging.heading}</SectionTitle>
+          <SectionTitle index="02.">{c.features.heading}</SectionTitle>
+          <p className="text-gray-300 leading-relaxed mb-8">{c.features.intro}</p>
+          <ItemGrid items={c.features.items} />
+        </section>
+
+        {/* 03 Commands vs facts */}
+        <section className="mb-16">
+          <SectionTitle index="03.">{c.messaging.heading}</SectionTitle>
           <p className="text-gray-300 leading-relaxed mb-8">{c.messaging.intro}</p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {c.messaging.channels.map((channel) => (
@@ -107,9 +114,9 @@ const ProjectPizza: React.FC = () => {
           </div>
         </section>
 
-        {/* 03 Flow */}
+        {/* 04 Flow */}
         <section className="mb-16">
-          <SectionTitle index="03.">{c.flow.heading}</SectionTitle>
+          <SectionTitle index="04.">{c.flow.heading}</SectionTitle>
           <ol className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             {c.flow.steps.map((step, i) => (
               <li key={step.title} className="glass-panel rounded-lg p-5 border border-white/5 flex gap-4">
@@ -125,23 +132,23 @@ const ProjectPizza: React.FC = () => {
           </ol>
         </section>
 
-        {/* 04 Reliability */}
+        {/* 05 Reliability */}
         <section className="mb-16">
-          <SectionTitle index="04.">{c.reliability.heading}</SectionTitle>
+          <SectionTitle index="05.">{c.reliability.heading}</SectionTitle>
           <p className="text-gray-300 leading-relaxed mb-8">{c.reliability.intro}</p>
           <ItemGrid items={c.reliability.items} />
         </section>
 
-        {/* 05 Scheduling and KPIs */}
+        {/* 06 Scheduling and KPIs */}
         <section className="mb-16">
-          <SectionTitle index="05.">{c.planning.heading}</SectionTitle>
+          <SectionTitle index="06.">{c.planning.heading}</SectionTitle>
           <p className="text-gray-300 leading-relaxed mb-8">{c.planning.intro}</p>
           <ItemGrid items={c.planning.items} />
         </section>
 
-        {/* 06 Outcome */}
+        {/* 07 Outcome */}
         <section>
-          <SectionTitle index="06.">{c.outcome.heading}</SectionTitle>
+          <SectionTitle index="07.">{c.outcome.heading}</SectionTitle>
           <ul className="space-y-3">
             {c.outcome.points.map((point, i) => (
               <li key={i} className="flex gap-3 text-gray-300 leading-relaxed">

@@ -303,6 +303,18 @@ export const enContent: PortfolioContent = {
         "This project gives each one a real job on the same production line, and doubles as practice in Industrial Engineering and production scheduling: the oven is deliberately the slowest station, to see whether the measured numbers match theory.",
       ],
     },
+    features: {
+      heading: "Key Features",
+      intro: "Everything is done from one dashboard, and every change shows up on the line and in the KPIs right away.",
+      items: [
+        { name: "Place orders", desc: "Place orders by hand with a priority, or let a generator place them at a set arrival rate" },
+        { name: "Adjust station recipes", desc: "Change each station's recipe per product and watch the bottleneck and KPIs respond" },
+        { name: "Live ETA", desc: "Each order's completion time and due date are estimated from bottleneck capacity and queued WIP" },
+        { name: "KPI trend charts", desc: "Throughput, WIP and cycle time over time, to compare before and after a change" },
+        { name: "Lot handling", desc: "Track each lot's current station and status, and handle rework caused by breakdowns" },
+        { name: "Station performance", desc: "Utilization and activity for every station at a glance, with the current bottleneck highlighted" },
+      ],
+    },
     messaging: {
       heading: "Commands vs Facts",
       intro: "The system follows one rule: RabbitMQ carries commands, Kafka carries facts. A command has one receiver that must report back when done. A fact only states what already happened, so anyone can read it and replay it.",

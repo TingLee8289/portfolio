@@ -1,10 +1,10 @@
 import React, { useEffect } from 'react';
-import { Route, Routes, useLocation } from 'react-router-dom';
+import { RouteObject, useLocation, useRoutes } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import Footer from './components/Footer';
 import { useLanguage } from './LanguageContext';
-import { getPageTitle } from './routeMeta';
+import { EN_PREFIX, getPageTitle, stripLocale } from './routeMeta';
 
 import About from './components/About';
 import TechStack from './components/Skills';
@@ -23,14 +23,39 @@ declare global {
   }
 }
 
+// Every page is served at its plain path (zh) and under /en (en).
+const LOCALE_PREFIXES = ['', EN_PREFIX];
+const PAGES: [string, React.ReactElement][] = [
+  ['/', <Hero />],
+  ['/about', <About />],
+  ['/skills', <TechStack />],
+  ['/experience', <Experience />],
+  ['/projects', <Projects />],
+  ['/projects/monitoring', <ProjectMonitoring />],
+  ['/projects/upgrade-jdk17', <ProjectUpgrade />],
+  ['/projects/latency-dashboard', <ProjectLatency />],
+  ['/projects/social-notion', <ProjectSocialNotion />],
+  ['/projects/pizza-factory-simulator', <ProjectPizza />],
+  ['/education', <Education />],
+];
+
+const ROUTE_OBJECTS: RouteObject[] = [
+  ...LOCALE_PREFIXES.flatMap((prefix) =>
+    PAGES.map(([path, element]) => ({ path: path === '/' ? prefix || '/' : prefix + path, element }))
+  ),
+  { path: '*', element: <Hero /> },
+];
+
 // Scroll reset, per-page <title>/description and GA4 page_view on route change.
 const RouteEffects: React.FC = () => {
   const { pathname } = useLocation();
   const { language, t } = useLanguage();
 
+  // Switching language keeps the scroll position; only a new page resets it.
+  const page = stripLocale(pathname);
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, [pathname]);
+  }, [page]);
 
   useEffect(() => {
     document.documentElement.lang = language === 'zh' ? 'zh-Hant' : 'en';
@@ -51,7 +76,8 @@ const RouteEffects: React.FC = () => {
 
 const App: React.FC = () => {
   const { pathname } = useLocation();
-  const isHome = pathname === '/';
+  const isHome = stripLocale(pathname) === '/';
+  const routes = useRoutes(ROUTE_OBJECTS);
 
   return (
     <div className="min-h-screen bg-vscode-bg text-vscode-text flex flex-col md:flex-row">
@@ -59,20 +85,7 @@ const App: React.FC = () => {
       <Navbar />
       <main className="flex-1 md:ml-16 w-full flex flex-col">
           <div key={pathname} className="flex-1 animate-fade-in-up">
-            <Routes>
-              <Route path="/" element={<Hero />} />
-              <Route path="/about" element={<About />} />
-              <Route path="/skills" element={<TechStack />} />
-              <Route path="/experience" element={<Experience />} />
-              <Route path="/projects" element={<Projects />} />
-              <Route path="/projects/monitoring" element={<ProjectMonitoring />} />
-              <Route path="/projects/upgrade-jdk17" element={<ProjectUpgrade />} />
-              <Route path="/projects/latency-dashboard" element={<ProjectLatency />} />
-              <Route path="/projects/social-notion" element={<ProjectSocialNotion />} />
-              <Route path="/projects/pizza-factory-simulator" element={<ProjectPizza />} />
-              <Route path="/education" element={<Education />} />
-              <Route path="*" element={<Hero />} />
-            </Routes>
+            {routes}
           </div>
         {!isHome && <Footer />}
       </main>

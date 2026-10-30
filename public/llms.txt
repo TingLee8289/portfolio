@@ -1,6 +1,6 @@
 # Wan-Ting Lee (李宛庭) | Full-Stack Developer
 
-> Portfolio of Wan-Ting Lee, a Full-Stack Developer based in Taoyuan, Taiwan, with a semiconductor industry background (Taiwan Mobile, TSMC, VIS). Available in Traditional Chinese and English; append `?lang=en` or `?lang=zh` to any page to choose a language.
+> Portfolio of Wan-Ting Lee, a Full-Stack Developer based in Taoyuan, Taiwan, with a semiconductor industry background (Taiwan Mobile, TSMC, VIS). Available in Traditional Chinese (default URLs) and English (prefix any path with `/en`, e.g. https://tingwtlee.dev/en/about).
 
 ## Pages
 

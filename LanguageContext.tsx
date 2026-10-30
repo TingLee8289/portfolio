@@ -1,78 +1,42 @@
-import React, { createContext, useContext, useEffect, useState, useCallback } from 'react';
+import React, { createContext, useContext, useEffect, useCallback } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { Locale, PortfolioContent } from './types';
 import { CONTENT } from './content';
-
-const STORAGE_KEY = 'portfolio-lang';
-const SUPPORTED: Locale[] = ['zh', 'en'];
-const DEFAULT_LOCALE: Locale = 'zh';
-
-function isLocale(value: string | null): value is Locale {
-  return value !== null && (SUPPORTED as string[]).includes(value);
-}
-
-function resolveInitialLocale(): Locale {
-  if (typeof window === 'undefined') return DEFAULT_LOCALE;
-
-  const queryLang = new URLSearchParams(window.location.search).get('lang');
-  if (isLocale(queryLang)) return queryLang;
-
-  const stored = window.localStorage.getItem(STORAGE_KEY);
-  if (isLocale(stored)) return stored;
-
-  const nav = window.navigator.language?.toLowerCase() ?? '';
-  if (nav.startsWith('zh')) return 'zh';
-  if (nav.startsWith('en')) return 'en';
-
-  return DEFAULT_LOCALE;
-}
-
-function writeLocaleToUrl(locale: Locale) {
-  const url = new URL(window.location.href);
-  url.searchParams.set('lang', locale);
-  window.history.replaceState(window.history.state, '', url);
-}
+import { getLocaleFromPath, localizePath, stripLocale } from './routeMeta';
 
 interface LanguageContextValue {
   language: Locale;
-  setLanguage: (lang: Locale) => void;
+  // Prefixes an internal path with the current locale (/about -> /en/about).
+  lp: (path: string) => string;
   t: PortfolioContent;
 }
 
 const LanguageContext = createContext<LanguageContextValue | undefined>(undefined);
 
+// The locale comes from the URL (/en/... is English, everything else Chinese),
+// so each language has its own indexable URL and the prerendered HTML always
+// matches the first client render.
 export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  const [language, setLanguageState] = useState<Locale>(DEFAULT_LOCALE);
+  const { pathname, search, hash } = useLocation();
+  const navigate = useNavigate();
+  const language = getLocaleFromPath(pathname);
 
-  const setLanguage = useCallback((lang: Locale) => {
-    setLanguageState(lang);
-    window.localStorage.setItem(STORAGE_KEY, lang);
-    writeLocaleToUrl(lang);
-  }, []);
-
-  // Start from DEFAULT_LOCALE so the first client render matches the
-  // prerendered HTML, then switch to the visitor's resolved locale
-  // (?lang=, localStorage, navigator) and keep the URL in sync.
+  // Old links used ?lang=en / ?lang=zh; move them onto the path-based URL.
   useEffect(() => {
-    const resolved = resolveInitialLocale();
-    setLanguageState(resolved);
-    writeLocaleToUrl(resolved);
-  }, []);
+    const params = new URLSearchParams(search);
+    const queryLang = params.get('lang');
+    if (queryLang !== 'zh' && queryLang !== 'en') return;
+    params.delete('lang');
+    const rest = params.toString();
+    navigate(localizePath(stripLocale(pathname), queryLang) + (rest ? `?${rest}` : '') + hash, { replace: true });
+  }, [navigate, pathname, search, hash]);
 
-  useEffect(() => {
-    const onPopState = () => {
-      const queryLang = new URLSearchParams(window.location.search).get('lang');
-      if (isLocale(queryLang) && queryLang !== language) {
-        setLanguageState(queryLang);
-      }
-    };
-    window.addEventListener('popstate', onPopState);
-    return () => window.removeEventListener('popstate', onPopState);
-  }, [language]);
+  const lp = useCallback((path: string) => localizePath(path, language), [language]);
 
   const t = CONTENT[language];
 
   return (
-    <LanguageContext.Provider value={{ language, setLanguage, t }}>
+    <LanguageContext.Provider value={{ language, lp, t }}>
       {children}
     </LanguageContext.Provider>
   );

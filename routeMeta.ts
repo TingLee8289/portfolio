@@ -1,4 +1,20 @@
-import { PortfolioContent } from './types';
+import { Locale, PortfolioContent } from './types';
+
+// Chinese lives at the root (/about), English under /en (/en/about).
+export const EN_PREFIX = '/en';
+
+export function getLocaleFromPath(pathname: string): Locale {
+  return pathname === EN_PREFIX || pathname.startsWith(`${EN_PREFIX}/`) ? 'en' : 'zh';
+}
+
+export function stripLocale(pathname: string): string {
+  return getLocaleFromPath(pathname) === 'en' ? pathname.slice(EN_PREFIX.length) || '/' : pathname;
+}
+
+export function localizePath(path: string, locale: Locale): string {
+  if (locale === 'zh') return path;
+  return path === '/' ? EN_PREFIX : `${EN_PREFIX}${path}`;
+}
 
 export const ROUTES = [
   '/',
@@ -22,7 +38,8 @@ const NAV_KEY_BY_PATH: Record<string, 'about' | 'skills' | 'experience' | 'proje
   '/education': 'education',
 };
 
-export function getPageTitle(pathname: string, t: PortfolioContent): string {
+export function getPageTitle(localizedPathname: string, t: PortfolioContent): string {
+  const pathname = stripLocale(localizedPathname);
   if (pathname === '/projects/monitoring') return `${t.monitoringCase.title} | ${t.ui.seo.title}`;
   if (pathname === '/projects/upgrade-jdk17') return `${t.upgradeCase.title} | ${t.ui.seo.title}`;
   if (pathname === '/projects/latency-dashboard') return `${t.latencyCase.title} | ${t.ui.seo.title}`;

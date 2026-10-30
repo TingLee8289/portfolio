@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { NavLink } from 'react-router-dom';
+import { Link, NavLink, useLocation } from 'react-router-dom';
 import {
   User,
   Code2,
@@ -12,11 +12,13 @@ import {
 } from 'lucide-react';
 import { PERSONAL_INFO_BASE } from '../constants';
 import { useLanguage } from '../LanguageContext';
+import { localizePath, stripLocale } from '../routeMeta';
 
 const Navbar: React.FC = () => {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const mobileNavRef = useRef<HTMLElement>(null);
-  const { language, setLanguage, t } = useLanguage();
+  const { language, t, lp } = useLanguage();
+  const { pathname } = useLocation();
 
   const navItems = [
     { name: t.ui.nav.about, href: '/about', icon: User },
@@ -43,7 +45,8 @@ const Navbar: React.FC = () => {
     };
   }, [isMobileOpen]);
 
-  const toggleLanguage = () => setLanguage(language === 'zh' ? 'en' : 'zh');
+  // Plain link to the same page in the other language, so crawlers can follow it too.
+  const otherLanguagePath = localizePath(stripLocale(pathname), language === 'zh' ? 'en' : 'zh');
   const languageButtonLabel = language === 'zh' ? 'EN' : '中';
   const languageButtonTitle = language === 'zh' ? 'Switch to English' : '切換為中文';
 
@@ -53,7 +56,7 @@ const Navbar: React.FC = () => {
       <nav className="hidden md:flex flex-col fixed left-0 top-0 h-full w-16 bg-vscode-activity border-r border-white/10 z-50 py-4 justify-between">
         <div className="flex flex-col items-center gap-6">
           <NavLink
-            to="/"
+            to={lp('/')}
             end
             className="p-2 mb-2 group relative"
             aria-label={t.ui.nav.info}
@@ -68,7 +71,7 @@ const Navbar: React.FC = () => {
             return (
               <NavLink
                 key={item.name}
-                to={item.href}
+                to={lp(item.href)}
                 className={({ isActive }) =>
                   `p-3 hover:text-white hover:bg-white/5 border-l-2 hover:border-vscode-accent transition-all group relative ${
                     isActive ? 'text-white border-vscode-accent bg-white/5' : 'text-gray-400 border-transparent'
@@ -86,14 +89,14 @@ const Navbar: React.FC = () => {
           })}
         </div>
         <div className="flex flex-col items-center gap-6 pb-4">
-           <button
-             onClick={toggleLanguage}
+           <Link
+             to={otherLanguagePath}
              className="w-8 h-8 flex items-center justify-center rounded border border-white/10 text-gray-400 hover:text-white hover:border-vscode-accent font-mono text-[10px] transition-colors"
-             aria-label="Toggle language"
+             aria-label={languageButtonTitle}
              title={languageButtonTitle}
            >
              {languageButtonLabel}
-           </button>
+           </Link>
            <div className="p-3 cursor-pointer opacity-80 hover:opacity-100 transition-opacity">
              <img
                src={PERSONAL_INFO_BASE.logo}
@@ -107,19 +110,19 @@ const Navbar: React.FC = () => {
       {/* Mobile Top Bar */}
       <nav ref={mobileNavRef} className="md:hidden fixed w-full z-50 bg-vscode-bg/90 backdrop-blur-md border-b border-white/10">
         <div className="px-4 h-14 flex items-center justify-between">
-          <NavLink to="/" end className="flex items-center gap-2" onClick={() => setIsMobileOpen(false)}>
+          <NavLink to={lp('/')} end className="flex items-center gap-2" onClick={() => setIsMobileOpen(false)}>
             <Terminal className="w-6 h-6 text-vscode-accent" />
             <span className="font-mono font-bold text-white">Wan-Ting.dev</span>
           </NavLink>
           <div className="flex items-center gap-3">
-            <button
-              onClick={toggleLanguage}
+            <Link
+              to={otherLanguagePath}
               className="w-8 h-8 flex items-center justify-center rounded border border-white/10 text-gray-300 hover:text-white hover:border-vscode-accent font-mono text-[10px] transition-colors"
-              aria-label="Toggle language"
+              aria-label={languageButtonTitle}
               title={languageButtonTitle}
             >
               {languageButtonLabel}
-            </button>
+            </Link>
             <button
               onClick={() => setIsMobileOpen(!isMobileOpen)}
               className="text-gray-300 hover:text-white"
@@ -137,7 +140,7 @@ const Navbar: React.FC = () => {
             {navItems.map((item) => (
               <NavLink
                 key={item.name}
-                to={item.href}
+                to={lp(item.href)}
                 onClick={() => setIsMobileOpen(false)}
                 className={({ isActive }) =>
                   `block py-2 hover:text-white font-mono ${isActive ? 'text-white' : 'text-gray-300'}`

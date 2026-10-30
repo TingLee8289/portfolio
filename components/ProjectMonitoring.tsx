@@ -27,7 +27,7 @@ const SectionTitle: React.FC<{ index: string; children: React.ReactNode }> = ({ 
 );
 
 const ProjectMonitoring: React.FC = () => {
-  const { t } = useLanguage();
+  const { t, lp } = useLanguage();
   const c = t.monitoringCase;
   const labels = t.ui.projectsPage;
 
@@ -35,7 +35,7 @@ const ProjectMonitoring: React.FC = () => {
     <article className="py-24">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <Link
-          to="/projects"
+          to={lp('/projects')}
           className="inline-flex items-center gap-2 text-sm font-mono text-gray-400 hover:text-white transition-colors mb-10"
         >
           <ArrowLeft className="w-4 h-4" />

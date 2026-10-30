@@ -5,7 +5,7 @@ import { useLanguage } from '../LanguageContext';
 import { Briefcase, ArrowRight, ExternalLink } from 'lucide-react';
 
 const Experience: React.FC = () => {
-  const { t } = useLanguage();
+  const { t, lp } = useLanguage();
   const EXPERIENCE_DATA = t.experience;
 
   return (
@@ -91,7 +91,7 @@ const Experience: React.FC = () => {
                             )}
                             {bullet.detailPath && (
                               <Link
-                                to={bullet.detailPath}
+                                to={lp(bullet.detailPath)}
                                 className="ml-2 inline-flex items-center gap-1 text-sm font-mono text-vscode-accent hover:text-white transition-colors whitespace-nowrap"
                               >
                                 {t.ui.projectsPage.viewCase}
