@@ -15,6 +15,7 @@ import ProjectMonitoring from './components/ProjectMonitoring';
 import ProjectSocialNotion from './components/ProjectSocialNotion';
 import ProjectLatency from './components/ProjectLatency';
 import ProjectUpgrade from './components/ProjectUpgrade';
+import ProjectPizza from './components/ProjectPizza';
 
 declare global {
   interface Window {
@@ -68,6 +69,7 @@ const App: React.FC = () => {
               <Route path="/projects/upgrade-jdk17" element={<ProjectUpgrade />} />
               <Route path="/projects/latency-dashboard" element={<ProjectLatency />} />
               <Route path="/projects/social-notion" element={<ProjectSocialNotion />} />
+              <Route path="/projects/pizza-factory-simulator" element={<ProjectPizza />} />
               <Route path="/education" element={<Education />} />
               <Route path="*" element={<Hero />} />
             </Routes>

@@ -288,6 +288,87 @@ export const zhContent: PortfolioContent = {
       ],
     },
   },
+  pizzaCase: {
+    imageAlt: "披薩工廠模擬器的 3D 產線與 KPI 儀表板畫面",
+    demo: { caption: "儀表板實際運作畫面" },
+    title: "披薩工廠模擬器",
+    subtitle: "IE & PC Planning 應用於七站式披薩產線：交期估算、批次處理與配方調整，並即時監控 KPI",
+    summary: "用真實的 Kafka + RabbitMQ 訊息流驅動一條可觀察的七站式披薩產線：RabbitMQ 負責派工指令，Kafka 記錄每一站發生的事件。排程器依派工規則決定下一張工單，KPI 服務即時計算 throughput、WIP、cycle time，並呈現在 3D 儀表板上。",
+    role: "個人專案（需求分析、系統設計、開發、測試）",
+    tech: ["Python", "Kafka", "RabbitMQ", "FastAPI + SSE", "Three.js", "Docker", "IE", "PC Planning"],
+    problem: {
+      heading: "專案緣起",
+      body: [
+        "這是一個個人學習專案，靈感來自一首童謠〈Pizza Party〉及我過去的工作經驗。",
+        "融合 IE 的產線指標、PC 的排程派工、Kafka 事件流、RabbitMQ 指令佇列等主題，打造一個能實際跑起來、看得到過程的披薩工廠。",
+      ],
+    },
+    messaging: {
+      heading: "訊息分工：指令 vs 事實",
+      intro: "整個系統只有一條規則：RabbitMQ 傳指令，Kafka 傳事實。指令有明確的接收者，做完要回報；事實只描述已發生的事，誰都可以讀，也可以重播。",
+      channels: [
+        {
+          name: "RabbitMQ",
+          role: "指令（請你去做）",
+          points: [
+            "工單進入 workorders.intake，排程器再派工到各站的 station.<id>.jobs",
+            "每站 prefetch 1，一次只處理一張，處理完才 ack",
+            "失敗進入 TTL 5 秒的 retry queue，超過次數或格式錯誤則進 DLQ",
+          ],
+        },
+        {
+          name: "Kafka",
+          role: "事實（已經發生）",
+          points: [
+            "站點寫入 op_started / op_completed 到 station.events，以站名分區",
+            "訂單生命週期寫入 order.lifecycle，KPI 快照寫入 compact topic",
+            "排程器、KPI、儀表板各自用獨立的 consumer group 讀同一份事件",
+          ],
+        },
+      ],
+    },
+    flow: {
+      heading: "一張訂單的流程",
+      steps: [
+        { title: "下單", desc: "產生器依到達率自動下單，或在儀表板手動下單，工單送進 RabbitMQ。" },
+        { title: "投料", desc: "排程器記錄 created 事件，估算 ETA 與交期後，依派工規則決定投料順序。" },
+        { title: "派工", desc: "排程器把工作派到下一站的 jobs queue，七站依序是擀麵團、上醬、起司、配料、烘烤、切片、裝盒。" },
+        { title: "加工", desc: "站點寫入 op_started，依品項的 cycle time 實際等待，完成後寫入 op_completed 再 ack。" },
+        { title: "交接", desc: "站與站之間不直接溝通，由排程器讀到 Kafka 的完成事件後，再派下一站。" },
+        { title: "監控", desc: "KPI 服務從事件折疊出即時指標，經 SSE 推到 3D 儀表板。" },
+      ],
+    },
+    reliability: {
+      heading: "可靠性設計",
+      intro: "站點和排程器都可能在任何時候被中斷，設計目標是工作不遺失，也不會重複計算。",
+      items: [
+        { name: "先 Kafka 後 ack", desc: "完成事件 flush 到 Kafka 後才 ack；中途 crash 會重送，再以 event_id 去重，同一件工作只記一次" },
+        { name: "Retry 與 DLQ", desc: "暫時性失敗走 TTL retry queue 重派，無效訊息直接進 DLQ，不會無限重試" },
+        { name: "機台故障與重工", desc: "可模擬站點隨機停機與修復；失敗的 lot 進入冷卻佇列再回到排程，不會卡住站點" },
+        { name: "重啟還原", desc: "排程器重啟時從 Kafka 重播事件，重建在製品與冷卻中 lot 的狀態" },
+        { name: "Chaos 測試", desc: "以腳本在運行中隨機砍掉容器，驗證產線能自行恢復" },
+      ],
+    },
+    planning: {
+      heading: "排程與 KPI",
+      intro: "三種披薩品項在各站的加工時間不同，讓派工規則之間有實際差異可以比較；烘烤站每片 12 到 14 秒，其他站 3 到 6 秒，是刻意設計的瓶頸。",
+      items: [
+        { name: "派工規則", desc: "FIFO、EDD、SPT 可即時切換，同一組訂單能比較不同規則的 KPI" },
+        { name: "優先度與交期", desc: "工單有 1 到 99 的優先度；投料時依瓶頸與排隊 WIP 估算 ETA，並推算交期" },
+        { name: "即時 KPI", desc: "throughput、WIP、cycle time（平均、p50、p95）與各站使用率" },
+        { name: "瓶頸判定", desc: "以使用率搭配遲滯（hysteresis）判定瓶頸站，避免在兩站之間來回跳動" },
+        { name: "理論值對照", desc: "排除暖機期後，以 Little's Law（L = λW）與瓶頸產能檢查量測值" },
+      ],
+    },
+    outcome: {
+      heading: "成果",
+      points: [
+        "超載測試中，實測 throughput 為理論瓶頸產能的 91%，落在預設的 75% 到 115% 範圍內。",
+        "約 1,200 個 Python 測試與 250 個前端測試，整合測試直接連真實的 Kafka 與 RabbitMQ。",
+        "Docker 一鍵啟動 broker、七個站點與所有服務，同一個 seed 可重現相同的訂單。",
+      ],
+    },
+  },
   ui: {
     nav: {
       info: "資訊",
@@ -312,13 +393,15 @@ export const zhContent: PortfolioContent = {
       configTitle: "規則設定範例",
       configNote: "示意用的設定概念，姓名、Email 與電話皆為假資料。",      lockWorkerA: "執行者 A：取得 lock，執行規則",
       lockWorkerB: "執行者 B：未取得 lock，不執行",
+      workTag: "工作",
+      personalTag: "個人",
     },
     hero: {
       welcomeComment: "# Welcome to my portfolio",
       headlineRole: "全端開發工程師",
       headlineName: "李宛庭",
       headlineTail: "用資料看問題，用程式解問題。",
-      cta: "查看工作經歷",
+      cta: "查看專案",
       location: "Taoyuan, Taiwan",
     },
     joke: {

@@ -288,6 +288,87 @@ export const enContent: PortfolioContent = {
       ],
     },
   },
+  pizzaCase: {
+    imageAlt: "Pizza factory simulator 3D production line and KPI dashboard",
+    demo: { caption: "The dashboard in action: placing an order and following the lot to shipment" },
+    title: "Pizza Factory Simulator",
+    subtitle: "Industrial Engineering and production planning on a seven-station pizza line: due-date estimation, lot handling and recipe adjustment, with live KPIs",
+    summary: "A seven-station pizza line simulated on real message brokers: RabbitMQ carries dispatch commands and Kafka records what happens at each station. A scheduler picks the next job by dispatch rule, and a KPI service computes throughput, WIP, cycle time and the bottleneck in real time, compares them with Industrial Engineering theory, and streams everything to a 3D dashboard.",
+    role: "Personal project (Requirements Analysis, System Design, Development, Testing)",
+    tech: ["Python", "Kafka", "RabbitMQ", "FastAPI + SSE", "Three.js", "Docker", "Industrial Engineering", "Production Control & Planning"],
+    problem: {
+      heading: "Background",
+      body: [
+        "Kafka and message queues both move messages, but from documentation alone the difference between them easily stays abstract: which messages need to be acknowledged as done, and which should be recorded for anyone to replay?",
+        "This project gives each one a real job on the same production line, and doubles as practice in Industrial Engineering and production scheduling: the oven is deliberately the slowest station, to see whether the measured numbers match theory.",
+      ],
+    },
+    messaging: {
+      heading: "Commands vs Facts",
+      intro: "The system follows one rule: RabbitMQ carries commands, Kafka carries facts. A command has one receiver that must report back when done. A fact only states what already happened, so anyone can read it and replay it.",
+      channels: [
+        {
+          name: "RabbitMQ",
+          role: "Commands (please do this)",
+          points: [
+            "Orders enter workorders.intake, then the scheduler dispatches jobs to each station's station.<id>.jobs queue",
+            "Each station uses prefetch 1, handling one job at a time and acking only when done",
+            "Failures go to a retry queue with a 5-second TTL; jobs over the retry limit or with an invalid format go to a DLQ",
+          ],
+        },
+        {
+          name: "Kafka",
+          role: "Facts (this happened)",
+          points: [
+            "Stations write op_started / op_completed to station.events, partitioned by station",
+            "Order lifecycle events go to order.lifecycle, and KPI snapshots to a compacted topic",
+            "The scheduler, KPI service and dashboard each read the same events with their own consumer group",
+          ],
+        },
+      ],
+    },
+    flow: {
+      heading: "Life of an Order",
+      steps: [
+        { title: "Order", desc: "A generator places orders at a set arrival rate, or orders are placed by hand on the dashboard, and sent to RabbitMQ." },
+        { title: "Release", desc: "The scheduler records a created event, estimates the ETA and due date, and releases orders by the active dispatch rule." },
+        { title: "Dispatch", desc: "The scheduler sends the job to the next station's queue. The seven stations are dough, sauce, cheese, toppings, bake, slice and package." },
+        { title: "Process", desc: "The station writes op_started, waits the real cycle time for that product, writes op_completed, then acks." },
+        { title: "Hand-off", desc: "Stations never talk to each other. The scheduler reads the completion event from Kafka and dispatches the next step." },
+        { title: "Monitor", desc: "The KPI service folds events into live metrics and pushes them to the 3D dashboard over SSE." },
+      ],
+    },
+    reliability: {
+      heading: "Reliability",
+      intro: "Stations and the scheduler can be interrupted at any moment. The goal is that no work is lost and none is counted twice.",
+      items: [
+        { name: "Kafka first, then ack", desc: "A station acks only after the completion event is flushed to Kafka. A crash causes redelivery, and event_id dedupe records the work once" },
+        { name: "Retry and DLQ", desc: "Temporary failures are re-dispatched through a TTL retry queue; invalid messages go straight to the DLQ instead of retrying forever" },
+        { name: "Breakdowns and rework", desc: "Stations can break down and be repaired at random. A failed lot waits in a cool-down queue before returning to the scheduler, so it never blocks the station" },
+        { name: "Restart recovery", desc: "On restart the scheduler replays events from Kafka to rebuild WIP and lots in cool-down" },
+        { name: "Chaos testing", desc: "A script kills containers at random during a run to check that the line recovers by itself" },
+      ],
+    },
+    planning: {
+      heading: "Scheduling and KPIs",
+      intro: "Three pizza products take different times at each station, so dispatch rules produce real differences. The oven takes 12 to 14 seconds per pizza while other stations take 3 to 6, making it the bottleneck by design.",
+      items: [
+        { name: "Dispatch rules", desc: "FIFO, EDD and SPT can be switched live, and the same set of orders can be compared across rules" },
+        { name: "Priority and due dates", desc: "Orders carry a priority from 1 to 99; at release the ETA is estimated from the bottleneck and queued WIP, and a due date is derived from it" },
+        { name: "Live KPIs", desc: "Throughput, WIP, cycle time (mean, p50, p95) and utilization per station" },
+        { name: "Bottleneck detection", desc: "Utilization with hysteresis picks the bottleneck station, so it does not flip back and forth between two stations" },
+        { name: "Checks against theory", desc: "With warm-up excluded, measurements are checked against Little's Law (L = λW) and bottleneck capacity" },
+      ],
+    },
+    outcome: {
+      heading: "Outcome",
+      points: [
+        "In an overload test, measured throughput reached 91% of the theoretical bottleneck capacity, inside the expected 75% to 115% band.",
+        "About 1,200 Python tests and 250 frontend tests, with integration tests running against real Kafka and RabbitMQ brokers.",
+        "Docker starts the brokers, all seven stations and every service with one command, and the same seed reproduces the same orders.",
+      ],
+    },
+  },
   ui: {
     nav: {
       info: "Info",
@@ -313,13 +394,15 @@ export const enContent: PortfolioContent = {
       configNote:"Illustrative configuration only. Names, emails and phone numbers are made up.",
       lockWorkerA: "Worker A: gets the lock, runs the rule",
       lockWorkerB: "Worker B: no lock, does not run",
+      workTag: "Work",
+      personalTag: "Personal",
     },
     hero: {
       welcomeComment: "# Welcome to my portfolio",
       headlineRole: "Full-Stack Developer |\nSoftware Engineering + Semiconductor Process Integration",
       headlineName: "Wan-Ting Lee",
       headlineTail: "reads problems in data and solves them in code.",
-      cta: "See Experience",
+      cta: "See Projects",
       location: "Taoyuan, Taiwan",
     },
     joke: {

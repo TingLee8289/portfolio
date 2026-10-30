@@ -13,6 +13,7 @@
 - [The Journey from Java 8 to 17](https://tingwtlee.dev/projects/upgrade-jdk17): Case study of upgrading a billing platform from JDK 8 + Spring Boot 2 to JDK 17 + Spring Boot 3 to fix Checkmarx and WhiteSource findings, using AI-assisted unit tests and API automation tests as a safety net.
 - [API Latency Dashboards](https://tingwtlee.dev/projects/latency-dashboard): Case study of OpenSearch Dashboards built on Filebeat logs sharing one trace ID, used to find slow APIs, the most-called APIs, repeated external API calls and N+1 DB queries.
 - [Social Posts to Notion via LINE](https://tingwtlee.dev/projects/social-notion): Personal project that uses Google Apps Script and a LINE bot to save social media posts from multiple platforms into one searchable Notion database.
+- [Pizza Factory Simulator](https://tingwtlee.dev/projects/pizza-factory-simulator): Personal project: Industrial Engineering and production planning on a seven-station pizza line, with due-date estimation, lot handling, recipe adjustment and live KPIs, built on RabbitMQ commands, Kafka events and a 3D dashboard.
 - [Education](https://tingwtlee.dev/education): Linköping University (M.S.) and National Tsing Hua University (B.S.).
 
 ## Optional

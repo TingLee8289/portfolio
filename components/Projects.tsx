@@ -9,19 +9,28 @@ const Projects: React.FC = () => {
   const labels = ui.projectsPage;
 
   const cases = [
-    { to: '/projects/monitoring', data: t.monitoringCase, image: undefined, imageAlt: '' },
-    { to: '/projects/latency-dashboard', data: t.latencyCase, image: undefined, imageAlt: '' },
+    {
+      to: '/projects/pizza-factory-simulator',
+      data: t.pizzaCase,
+      image: '/projects/pizza-factory-simulator.webp',
+      imageAlt: t.pizzaCase.imageAlt,
+      category: 'personal',
+    },
+    { to: '/projects/monitoring', data: t.monitoringCase, image: undefined, imageAlt: '', category: 'work' },
+    { to: '/projects/latency-dashboard', data: t.latencyCase, image: undefined, imageAlt: '', category: 'work' },
     {
       to: '/projects/upgrade-jdk17',
       data: t.upgradeCase,
       image: '/projects/upgrade-jdk17.webp',
       imageAlt: t.upgradeCase.imageAlt,
+      category: 'work',
     },
     {
       to: '/projects/social-notion',
       data: t.socialNotionCase,
       image: '/projects/social-notion.webp',
       imageAlt: t.socialNotionCase.imageAlt,
+      category: 'personal',
     },
   ];
 
@@ -42,7 +51,7 @@ const Projects: React.FC = () => {
           image, title, subtitle, summary, tags and link line up across a row of cards.
         */}
         <div className={`grid grid-cols-1 gap-8 ${isTwoColumn ? 'lg:grid-cols-2 lg:gap-y-0' : ''}`}>
-          {cases.map(({ to, data, image, imageAlt }) => (
+          {cases.map(({ to, data, image, imageAlt, category }) => (
             <Link
               key={to}
               to={to}
@@ -60,7 +69,16 @@ const Projects: React.FC = () => {
                   className="w-full aspect-video object-cover rounded-lg mb-6 lg:row-start-1"
                 />
               )}
-              <h2 className="text-2xl sm:text-3xl font-bold text-white mb-2 lg:row-start-2">{data.title}</h2>
+              <div className="flex flex-wrap items-center gap-3 mb-2 lg:row-start-2">
+                <h2 className="text-2xl sm:text-3xl font-bold text-white">{data.title}</h2>
+                <span
+                  className={`px-3.5 py-1.5 text-base font-mono rounded bg-white/5 border border-white/5 ${
+                    category === 'work' ? 'text-vscode-function' : 'text-vscode-class'
+                  }`}
+                >
+                  {category === 'work' ? labels.workTag : labels.personalTag}
+                </span>
+              </div>
               <p className="text-vscode-accent font-mono text-sm mb-4 lg:row-start-3">{data.subtitle}</p>
               <p className="text-gray-300 leading-relaxed max-w-3xl mb-6 lg:row-start-4">{data.summary}</p>
               <div className="flex flex-wrap content-start gap-2 mb-6 lg:row-start-5">

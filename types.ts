@@ -95,6 +95,8 @@ export interface UIStrings {
     configTitle: string;
     configNote: string;    lockWorkerA: string;
     lockWorkerB: string;
+    workTag: string;
+    personalTag: string;
   };
   hero: {
     welcomeComment: string;
@@ -138,7 +140,7 @@ export interface CaseStudy {
   locking: { heading: string; intro: string; points: string[] };
 }
 
-export interface SocialCase {
+export interface FlowCase {
   imageAlt: string;
   title: string;
   subtitle: string;
@@ -148,6 +150,26 @@ export interface SocialCase {
   problem: { heading: string; body: string[] };
   flow: { heading: string; steps: { title: string; desc: string }[] };
   features: { heading: string; intro: string; items: { name: string; desc: string }[] };
+  outcome: { heading: string; points: string[] };
+}
+
+export interface PizzaCase {
+  imageAlt: string;
+  title: string;
+  subtitle: string;
+  summary: string;
+  role: string;
+  tech: string[];
+  demo: { caption: string };
+  problem: { heading: string; body: string[] };
+  messaging: {
+    heading: string;
+    intro: string;
+    channels: { name: string; role: string; points: string[] }[];
+  };
+  flow: { heading: string; steps: { title: string; desc: string }[] };
+  reliability: { heading: string; intro: string; items: { name: string; desc: string }[] };
+  planning: { heading: string; intro: string; items: { name: string; desc: string }[] };
   outcome: { heading: string; points: string[] };
 }
 
@@ -184,7 +206,8 @@ export interface PortfolioContent {
   education: EducationItem[];
   experience: ExperienceItem[];
   monitoringCase: CaseStudy;
-  socialNotionCase: SocialCase;
+  socialNotionCase: FlowCase;
+  pizzaCase: PizzaCase;
   latencyCase: LatencyCase;
   upgradeCase: UpgradeCase;
   ui: UIStrings;
