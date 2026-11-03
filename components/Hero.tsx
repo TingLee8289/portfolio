@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import { SOCIAL_LINKS } from '../constants';
 import { useLanguage } from '../LanguageContext';
+import { trackEvent } from '../analytics';
 // TODO: re-enable the random joke window once it is ready to launch.
 // import JokeWindow from './JokeWindow';
 
@@ -78,6 +79,7 @@ const Hero: React.FC = () => {
                   rel={external ? 'noopener noreferrer' : undefined}
                   title={link.platform}
                   aria-label={link.platform}
+                  onClick={() => trackEvent('click_social', { platform: link.platform })}
                   className="hover:text-white transition-colors"
                 >
                   <Icon className="w-4 h-4" />

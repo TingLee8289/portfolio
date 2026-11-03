@@ -5,6 +5,7 @@ import Hero from './components/Hero';
 import Footer from './components/Footer';
 import { useLanguage } from './LanguageContext';
 import { EN_PREFIX, getPageTitle, stripLocale } from './routeMeta';
+import { trackEvent } from './analytics';
 
 import About from './components/About';
 import TechStack from './components/Skills';
@@ -16,12 +17,6 @@ import ProjectSocialNotion from './components/ProjectSocialNotion';
 import ProjectLatency from './components/ProjectLatency';
 import ProjectUpgrade from './components/ProjectUpgrade';
 import ProjectPizza from './components/ProjectPizza';
-
-declare global {
-  interface Window {
-    gtag?: (...args: unknown[]) => void;
-  }
-}
 
 // Every page is served at its plain path (zh) and under /en (en).
 const LOCALE_PREFIXES = ['', EN_PREFIX];
@@ -64,12 +59,28 @@ const RouteEffects: React.FC = () => {
   }, [pathname, language, t]);
 
   useEffect(() => {
-    window.gtag?.('event', 'page_view', {
-      page_path: pathname,
+    trackEvent('page_view', {
       page_location: window.location.href,
       page_title: document.title,
     });
   }, [pathname]);
+
+  // Case study pages: scroll depth at 25/50/75% (GA4 enhanced measurement already sends 90%).
+  useEffect(() => {
+    if (!page.startsWith('/projects/')) return;
+    const remaining = [25, 50, 75];
+    const onScroll = () => {
+      const scrollable = document.documentElement.scrollHeight - window.innerHeight;
+      if (scrollable <= 0) return;
+      const percent = (window.scrollY / scrollable) * 100;
+      while (remaining.length && percent >= remaining[0]) {
+        trackEvent('scroll_depth', { percent: remaining.shift() });
+      }
+      if (!remaining.length) window.removeEventListener('scroll', onScroll);
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, [page]);
 
   return null;
 };

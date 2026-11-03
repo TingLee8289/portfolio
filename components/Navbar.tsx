@@ -13,6 +13,7 @@ import {
 import { PERSONAL_INFO_BASE } from '../constants';
 import { useLanguage } from '../LanguageContext';
 import { localizePath, stripLocale } from '../routeMeta';
+import { trackEvent } from '../analytics';
 
 const Navbar: React.FC = () => {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
@@ -49,6 +50,8 @@ const Navbar: React.FC = () => {
   const otherLanguagePath = localizePath(stripLocale(pathname), language === 'zh' ? 'en' : 'zh');
   const languageButtonLabel = language === 'zh' ? 'EN' : '中';
   const languageButtonTitle = language === 'zh' ? 'Switch to English' : '切換為中文';
+  const trackLanguageSwitch = () =>
+    trackEvent('switch_language', { from: language, to: language === 'zh' ? 'en' : 'zh' });
 
   return (
     <>
@@ -94,6 +97,7 @@ const Navbar: React.FC = () => {
              className="w-8 h-8 flex items-center justify-center rounded border border-white/10 text-gray-400 hover:text-white hover:border-vscode-accent font-mono text-[10px] transition-colors"
              aria-label={languageButtonTitle}
              title={languageButtonTitle}
+             onClick={trackLanguageSwitch}
            >
              {languageButtonLabel}
            </Link>
@@ -120,6 +124,7 @@ const Navbar: React.FC = () => {
               className="w-8 h-8 flex items-center justify-center rounded border border-white/10 text-gray-300 hover:text-white hover:border-vscode-accent font-mono text-[10px] transition-colors"
               aria-label={languageButtonTitle}
               title={languageButtonTitle}
+              onClick={trackLanguageSwitch}
             >
               {languageButtonLabel}
             </Link>

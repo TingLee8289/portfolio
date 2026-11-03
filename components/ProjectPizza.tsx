@@ -1,7 +1,8 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
 import { useLanguage } from '../LanguageContext';
+import { trackEvent } from '../analytics';
 
 const SectionTitle: React.FC<{ index: string; children: React.ReactNode }> = ({ index, children }) => (
   <div className="flex items-center gap-3 mb-8">
@@ -26,6 +27,8 @@ const ProjectPizza: React.FC = () => {
   const { t, lp } = useLanguage();
   const c = t.pizzaCase;
   const labels = t.ui.projectsPage;
+  // onPlay also fires on resume after pause; only the first play counts as a start.
+  const videoStarted = useRef(false);
 
   return (
     <article className="py-24">
@@ -51,6 +54,15 @@ const ProjectPizza: React.FC = () => {
               controls
               preload="metadata"
               aria-label={c.imageAlt}
+              onPlay={(e) => {
+                if (videoStarted.current) return;
+                videoStarted.current = true;
+                trackEvent('video_start', {
+                  video_title: 'pizza-factory-simulator',
+                  video_url: e.currentTarget.currentSrc,
+                  video_provider: 'self-hosted',
+                });
+              }}
             />
             <figcaption className="mt-3 text-sm text-gray-400">{c.demo.caption}</figcaption>
           </figure>

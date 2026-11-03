@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
 import { useLanguage } from '../LanguageContext';
+import { trackEvent } from '../analytics';
 
 const Projects: React.FC = () => {
   const { t, lp } = useLanguage();
@@ -51,10 +52,11 @@ const Projects: React.FC = () => {
           image, title, subtitle, summary, tags and link line up across a row of cards.
         */}
         <div className={`grid grid-cols-1 gap-8 ${isTwoColumn ? 'lg:grid-cols-2 lg:gap-y-0' : ''}`}>
-          {cases.map(({ to, data, image, imageAlt, category }) => (
+          {cases.map(({ to, data, image, imageAlt, category }, i) => (
             <Link
               key={to}
               to={lp(to)}
+              onClick={() => trackEvent('select_content', { content_type: 'project', content_id: to.split('/').pop(), position: i + 1 })}
               className={`group glass-panel rounded-xl p-6 sm:p-8 border-2 border-white/25 hover:border-vscode-accent transition-colors ${
                 isTwoColumn ? 'flex flex-col lg:grid lg:grid-rows-subgrid lg:row-span-6 lg:mb-8' : 'flex flex-col'
               }`}

@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { PROJECT_LINKS } from '../constants';
 import { useLanguage } from '../LanguageContext';
+import { trackEvent } from '../analytics';
 import { Briefcase, ArrowRight, ExternalLink } from 'lucide-react';
 
 const Experience: React.FC = () => {
@@ -73,6 +74,7 @@ const Experience: React.FC = () => {
                                     href={link.url}
                                     target="_blank"
                                     rel="noopener noreferrer"
+                                    onClick={() => trackEvent('click_project_link', { project: bullet.projectId, url: link.url })}
                                     className="text-vscode-class font-semibold bg-vscode-accent/10 border border-vscode-accent/20 px-2 py-0.5 rounded mr-2 text-base font-mono inline-flex items-center gap-1.5 mb-1 sm:mb-0 hover:bg-vscode-accent/20 hover:border-vscode-accent transition-colors"
                                   >
                                     <img src={link.logo} alt="" className="w-4 h-4 rounded-sm object-contain" />
